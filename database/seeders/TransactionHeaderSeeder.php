@@ -15,7 +15,7 @@ class TransactionHeaderSeeder extends Seeder
     public function run(): void
     {
         $statuses = ['pending', 'completed', 'cancelled'];
-        for($i = 1; $i <= 10; $i++) {
+        for($i = 1; $i <= 20; $i++) {
             $jam = rand(1, 5);
             $menit = rand(0, 59);
             $detik = rand(0, 59);
@@ -44,7 +44,7 @@ class TransactionHeaderSeeder extends Seeder
                     'pusat_id' => $pusatId,
                     'status' => $status,
                     'nomor_meja' => $nomorMeja,
-                    'total_waktu' => $jam . ' jam' . $menit . ' menit' . $detik . ' detik',
+                    'total_waktu' => $jam . ' jam ' . $menit . ' menit ' . $detik . ' detik',
                     'harga_per_jam' => $hargaPerJam,
                     'total_harga' => $jam * $hargaPerJam
                 ]);

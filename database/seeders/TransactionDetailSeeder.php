@@ -13,7 +13,7 @@ class TransactionDetailSeeder extends Seeder
      */
     public function run(): void
     {
-        for($i = 1; $i <= 3; $i++) {
+        for($i = 1; $i <= 6; $i++) {
             $transactionId = $i * 3;
 
             $pusatId = DB::table('transaction_headers')
@@ -43,6 +43,14 @@ class TransactionDetailSeeder extends Seeder
                 'harga' => $hargaFnb,
                 'quantity' => rand(1, 5),
             ]);
+
+            DB::table('transaction_headers')
+                ->where('id', $transactionId)
+                ->update([
+                    'total_harga' => DB::table('transaction_headers')
+                        ->where('id', $transactionId)
+                        ->value('total_harga') + ($hargaFnb * $quantity)
+                ]);
         }
     }
 }

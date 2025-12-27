@@ -1,5 +1,5 @@
 @extends('layouts.fullscreen-layout')
-
+@section('title', 'Login')
 @section('content')
     <div class="relative z-1 bg-white p-6 sm:p-0 dark:bg-gray-900">
         <div class="relative flex h-screen w-full flex-col justify-center sm:p-0 lg:flex-row dark:bg-gray-900">
@@ -36,11 +36,9 @@
                                         placeholder="youremail@gmail.com" autofocus>
 
                                     @error('email')
-                                        <span
-                                            class="border-gray-300 focus:border-brand-300 focus:ring-brand-500/10 dark:border-gray-700 dark:focus:border-brand-80"
-                                            role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
+                                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">
+                                            {{ $message }}
+                                        </p>
                                     @enderror
                                 </div>
                                 <div>
@@ -51,7 +49,9 @@
                                     <div x-data="{ showPassword: false }" class="relative">
                                         <input :type="showPassword ? 'text' : 'password'" name="password"
                                             placeholder="Enter your password"
-                                            class="h-11 w-full rounded-lg border bg-transparent py-2.5 pr-11 pl-4 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30
+                                            class="h-11 w-full rounded-lg border bg-transparent py-2.5 pr-11 pl-4 text-sm text-gray-800 placeholder:text-gray-400
+                                            focus:outline-none focus:ring-3
+                                            dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30
                                             @error('password')
                                                 border-red-500 focus:border-red-500 focus:ring-red-500/20
                                             @else
@@ -59,10 +59,30 @@
                                                 dark:border-gray-700 dark:focus:border-brand-800
                                             @enderror" />
 
-                                        <span @click="showPassword = !showPassword"
-                                            class="absolute top-1/2 right-4 z-30 -translate-y-1/2 cursor-pointer text-gray-500 dark:text-gray-400">
-                                        </span>
+                                        <!-- Toggle icon -->
+                                        <button type="button" @click="showPassword = !showPassword"
+                                            class="absolute top-1/2 right-4 -translate-y-1/2 text-gray-500 hover:text-gray-700
+                                                   dark:text-gray-400 dark:hover:text-white transition">
+                                            <!-- Eye (hidden password) -->
+                                            <svg x-show="!showPassword" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z" />
+                                                <circle cx="12" cy="12" r="3" />
+                                            </svg>
+
+                                            <!-- Eye-off (visible password) -->
+                                            <svg x-show="showPassword" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8
+                                                             a21.77 21.77 0 0 1 5.06-6.94" />
+                                                <path d="M1 1l22 22" />
+                                                <path d="M9.9 4.24A10.94 10.94 0 0 1 12 4
+                                                             c7 0 11 8 11 8
+                                                             a21.82 21.82 0 0 1-4.87 6.87" />
+                                            </svg>
+                                        </button>
                                     </div>
+
 
                                     @error('password')
                                         <p class="mt-1 text-sm text-red-600 dark:text-red-400">
@@ -114,10 +134,10 @@
                     <x-common.common-grid-shape />
                     <div class="flex max-w-xs flex-col items-center">
                         <a href="/" class="mb-4 block">
-                            <img src="./images/logo/auth-logo.svg" alt="Logo" />
+                            <img src="./images/logo/auth-logo.png" class="w-40" alt="Logo" />
                         </a>
-                        <p class="text-center text-gray-400 dark:text-white/60">
-                            Beel
+                        <p class="text-center text-gray-400 dark:text-white/60 text-5xl">
+                            Admin Billiard
                         </p>
                     </div>
                 </div>

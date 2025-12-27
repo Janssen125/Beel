@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\TransactionHeader;
 
 class TransactionController extends Controller
 {
@@ -35,7 +36,8 @@ class TransactionController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $transaction = TransactionHeader::with(['staff', 'pusat', 'details'])->findOrFail($id);
+        return view('pages.transactions.viewTransactionDetail', compact('transaction'));
     }
 
     /**
@@ -61,4 +63,5 @@ class TransactionController extends Controller
     {
         //
     }
+
 }
