@@ -1,0 +1,29 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Provinsi extends Model
+{
+    protected $table = 'provinsis';
+
+    protected $fillable = [
+        'nama_provinsi',
+    ];
+
+    public function kotas()
+    {
+        return $this->hasMany(Kota::class, 'provinsi_id');
+    }
+
+    public function pusats()
+    {
+        return $this->hasMany(Pusat::class, 'provinsi_id');
+    }
+
+    public function users()
+    {
+        return $this->hasMany(User::class, 'provinsi_id');
+    }
+}

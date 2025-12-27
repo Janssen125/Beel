@@ -17,6 +17,15 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->enum('role', ['superadmin', 'admin', 'staff'])->default('staff');
+            $table->date('dob')->nullable();
+            $table->enum('gender', ['male', 'female'])->nullable();
+            $table->string('phone')->nullable();
+            $table->string('address')->nullable();
+            $table->string('nik')->nullable();
+            $table->string('profile_photo')->nullable();
+            $table->foreignId('kota_id')->nullable()->constrained('kotas')->onDelete('set null');
+            $table->foreignId('provinsi_id')->nullable()->constrained('provinsis')->onDelete('set null');
             $table->rememberToken();
             $table->timestamps();
         });

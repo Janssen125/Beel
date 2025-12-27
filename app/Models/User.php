@@ -21,6 +21,15 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'dob',
+        'gender',
+        'phone',
+        'address',
+        'nik',
+        'profile_photo',
+        'kota_id',
+        'provinsi_id',
     ];
 
     /**
@@ -45,4 +54,30 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function pemilikPusat()
+    {
+        return $this->hasMany(Pusat::class, 'pemilik_id');
+    }
+
+    public function staffTransactions()
+    {
+        return $this->hasMany(TransactionHeader::class, 'staff_id');
+    }
+
+    public function userPusats()
+    {
+        return $this->hasMany(User_Pusat::class, 'user_id');
+    }
+
+    public function kota()
+    {
+        return $this->belongsTo(Kota::class, 'kota_id');
+    }
+
+    public function provinsi()
+    {
+        return $this->belongsTo(Provinsi::class, 'provinsi_id');
+    }
+
 }
