@@ -15,6 +15,32 @@ window.ApexCharts = ApexCharts;
 window.flatpickr = flatpickr;
 window.FullCalendar = Calendar;
 
+
+
+window.toast = function () {
+    return {
+        toasts: [],
+
+        show({ type, message }) {
+            const id = Date.now();
+
+            this.toasts.push({
+                id,
+                type,
+                message,
+                visible: true,
+            });
+
+            setTimeout(() => this.remove(id), 5000);
+        },
+
+        remove(id) {
+            this.toasts = this.toasts.filter(t => t.id !== id);
+        },
+    };
+};
+
+
 Alpine.start();
 
 // Initialize components on DOM ready

@@ -15,12 +15,12 @@ class MenuHelper
             [
                 'icon' => 'transaction',
                 'name' => 'Daftar Transaksi',
-                'path' => '/superadmin/transaction',
+                'path' => '/transactions/',
             ],
             [
                 'icon' => 'user',
                 'name' => 'Daftar Pengguna',
-                'path' => '/superadmin/users',
+                'path' => '/users/',
             ],
             [
                 'icon' => 'pusat',
@@ -51,13 +51,15 @@ class MenuHelper
                 'name' => 'Dashboard',
                 'path' => '/admin/dashboard',
             ],
-            // Buat cth :3
             [
-                'name' => 'Forms',
-                'icon' => 'forms',
-                'subItems' => [
-                    ['name' => 'Form Elements', 'path' => '/form-elements', 'pro' => false],
-                ],
+                'icon' => 'transaction',
+                'name' => 'Daftar Transaksi',
+                'path' => '/transactions/',
+            ],
+            [
+                'icon' => 'user',
+                'name' => 'Daftar Pengguna',
+                'path' => '/users/',
             ],
         ];
     }

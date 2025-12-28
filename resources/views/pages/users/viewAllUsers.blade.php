@@ -1,50 +1,46 @@
 @extends('layouts.app')
-@section('title', 'Daftar Transaksi')
+@section('title', 'Daftar Pengguna')
 @section('content')
     <div x-data="{
-        transactions: [
-            @foreach ($transactions as $t)
-            {
-                id: {{ $t->id }},
-                staff_name: '{{ $t->staff->name ?? '-' }}',
-                nama_customer: '{{ $t->nama_customer ?? '-' }}',
-                nama_pusat: '{{ $t->pusat->nama_pusat ?? '-' }}',
-                status: '{{ $t->status ?? '-' }}',
-                nomor_meja: '{{ $t->nomor_meja ?? '-' }}',
-                total_waktu: '{{ $t->total_waktu ?? '-' }}',
-                total_harga: '{{ $t->total_harga ?? '-' }}'
-            }@if (!$loop->last),@endif @endforeach
+        users: [
+            @foreach ($users as $u)
+        {
+            'id': {{ $u->id }},
+            'name': '{{ $u->name ?? '-' }}',
+            'email': '{{ $u->email ?? '-' }}',
+            'role': '{{ $u->role ?? '-' }}',
+            'profile_photo': '{{ $u->profile_photo ?? '../images/user/user-01.jpg' }}'
+        }@if (!$loop->last),@endif @endforeach
         ],
+    
     
         search: '',
     
         itemsPerPage: 10,
         currentPage: 1,
         dropdownOpen: null,
-        get filteredTransaction() {
-            if (!this.search) return this.transactions;
+    
+        get filteredUsers() {
+            if (!this.search) return this.users;
     
             const q = this.search.toLowerCase();
     
-            return this.transactions.filter(t =>
-                t.staff_name.toLowerCase().includes(q) ||
-                t.nama_customer.toLowerCase().includes(q) ||
-                t.nama_pusat.toLowerCase().includes(q) ||
-                t.status.toLowerCase().includes(q) ||
-                t.nomor_meja.toLowerCase().includes(q) ||
-                t.total_waktu.toLowerCase().includes(q) ||
-                t.total_harga.toLowerCase().includes(q)
+            return this.users.filter(u =>
+                u.name.toLowerCase().includes(q) ||
+                u.email.toLowerCase().includes(q) ||
+                u.role.toLowerCase().includes(q)
             );
         },
     
         get totalPages() {
-            return Math.ceil(this.filteredTransaction.length / this.itemsPerPage);
+            return Math.ceil(this.filteredUsers.length / this.itemsPerPage);
         },
     
-        get paginatedTransactions() {
+        get paginatedUsers() {
             const start = (this.currentPage - 1) * this.itemsPerPage;
-            return this.filteredTransaction.slice(start, start + this.itemsPerPage);
+            return this.filteredUsers.slice(start, start + this.itemsPerPage);
         },
+    
         get displayedPages() {
             const range = [];
             for (let i = 1; i <= this.totalPages; i++) {
@@ -75,14 +71,6 @@
                 this.currentPage = page;
             }
         },
-        getStatusClass(status) {
-            const classes = {
-                'completed': 'bg-green-50 text-green-600 dark:bg-green-500/15 dark:text-green-500',
-                'pending': 'bg-yellow-50 text-yellow-600 dark:bg-yellow-500/15 dark:text-orange-400',
-                'cancelled': 'bg-red-50 text-red-600 dark:bg-red-500/15 dark:text-red-500',
-            };
-            return classes[status] || '';
-        },
         toggleDropdown(id) {
             this.dropdownOpen = this.dropdownOpen === id ? null : id;
         }
@@ -91,7 +79,7 @@
             <!-- Header -->
             <div class="flex flex-col gap-2 px-5 mb-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Latest Transactions</h3>
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Daftar Pengguna</h3>
                 </div>
                 <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
                     <form>
@@ -123,25 +111,16 @@
                                     ID</th>
                                 <th scope="col"
                                     class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                                    Nama Staff</th>
+                                    Nama</th>
                                 <th scope="col"
                                     class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                                    Nama Customer</th>
+                                    Email</th>
                                 <th scope="col"
                                     class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                                    Nama Pusat</th>
+                                    Role</th>
                                 <th scope="col"
                                     class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                                    Status</th>
-                                <th scope="col"
-                                    class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                                    Nomor Meja</th>
-                                <th scope="col"
-                                    class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                                    Total Waktu</th>
-                                <th scope="col"
-                                    class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                                    Total Harga</th>
+                                    Profile Photo</th>
                                 <th scope="col"
                                     class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">
                                     <span class="sr-only">Aksi</span>
@@ -149,50 +128,36 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                            <template x-for="transaction in paginatedTransactions" :key="transaction.id">
+                            <template x-for="user in paginatedUsers" :key="user.id">
                                 <tr>
                                     <td class="px-4 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div class="text-sm text-gray-500 dark:text-gray-400" x-text="transaction.id">
+                                        <div class="flex items-center justify-center">
+                                            <div class="text-sm text-gray-500 dark:text-gray-400" x-text="user.id">
                                             </div>
-                                    </td>
-                                    <td class="px-4 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-500 dark:text-gray-400"
-                                            x-text="transaction.staff_name">
                                         </div>
                                     </td>
                                     <td class="px-4 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-500 dark:text-gray-400"
-                                            x-text="transaction.nama_customer">
+                                        <div class="text-sm text-gray-500 dark:text-gray-400" x-text="user.name">
                                         </div>
                                     </td>
                                     <td class="px-4 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-500 dark:text-gray-400"
-                                            x-text="transaction.nama_pusat">
+                                        <div class="text-sm text-gray-500 dark:text-gray-400" x-text="user.email">
                                         </div>
                                     </td>
                                     <td class="px-4 py-4 whitespace-nowrap">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
-                                            :class="getStatusClass(transaction.status)" x-text="transaction.status"></span>
-                                    </td>
-                                    <td class="px-4 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-500 dark:text-gray-400"
-                                            x-text="transaction.nomor_meja">
+                                        <div class="text-sm text-gray-500 dark:text-gray-400" x-text="user.role">
                                         </div>
                                     </td>
                                     <td class="px-4 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-500 dark:text-gray-400"
-                                            x-text="transaction.total_waktu">
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-500 dark:text-gray-400"
-                                            x-text="transaction.total_harga">
+                                        <div class="flex items-center justify-center">
+                                            <div class="w-10 h-10 overflow-hidden rounded-full">
+                                                <img :src="user.profile_photo" :alt="user.name">
+                                            </div>
                                         </div>
                                     </td>
                                     <td class="px-4 py-4 text-sm font-medium text-right whitespace-nowrap">
                                         <div class="flex justify-center relative">
-                                            <a :href="`/transactions/${transaction.id}`">
+                                            <a :href="`/users/${user.id}`">
                                                 <x-ui.button variant="outline">
                                                     Detail
                                                 </x-ui.button>

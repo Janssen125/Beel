@@ -67,7 +67,7 @@ class User extends Authenticatable
 
     public function userPusats()
     {
-        return $this->hasMany(User_Pusat::class, 'user_id');
+        return $this->hasOne(User_Pusat::class, 'user_id');
     }
 
     public function kota()

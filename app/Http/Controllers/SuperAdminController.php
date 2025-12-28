@@ -19,11 +19,6 @@ class SuperAdminController extends Controller
         return view('pages.superadmin.users');
     }
 
-    public function transactions() {
-        $transactions = TransactionHeader::with(['staff', 'pusat'])->get()->sortByDesc('created_at');
-        return view('pages.transactions.viewAllTransactions', compact('transactions'));
-    }
-
     public function fnb() {
         return view('pages.superadmin.fnb');
     }

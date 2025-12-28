@@ -129,6 +129,29 @@ window.addEventListener('resize', checkMobile);">
         </div>
 
     </div>
+    @if (session('success') || session('error'))
+        <div x-data="toast()" x-init="@if (session('success')) show({ type: 'success', message: '{{ session('success') }}' }) @endif
+        
+        @if (session('error')) show({ type: 'error', message: '{{ session('error') }}' }) @endif" class="fixed bottom-5 right-5 z-50 space-y-3">
+            <template x-for="toast in toasts" :key="toast.id">
+                <div x-show="toast.visible" x-transition
+                    class="flex items-start gap-3 w-100 rounded-lg px-4 py-3 shadow-lg"
+                    :class="toast.type === 'success' ?
+                        'bg-green-300 text-green-700 border border-green-700' :
+                        'bg-red-300 text-red-700 border border-red-700'">
+                    <div class="font-semibold" x-text="toast.type === 'success' ? 'Success' : 'Error'">
+                    </div>
+
+                    <div class="text-sm flex-1" x-text="toast.message"></div>
+
+                    <button @click="remove(toast.id)" class="text-gray-400 hover:text-gray-600">
+                        ✕
+                    </button>
+                </div>
+            </template>
+        </div>
+    @endif
+
 
 </body>
 

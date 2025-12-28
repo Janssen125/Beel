@@ -14,6 +14,9 @@ class UserPusatSeeder extends Seeder
     public function run(): void
     {
         DB::table('user_pusats')->insert([
+            ['user_id' => 2, 'pusat_id' => 1],
+            ['user_id' => 3, 'pusat_id' => 2],
+            ['user_id' => 4, 'pusat_id' => 3],
             ['user_id' => 5, 'pusat_id' => 1],
             ['user_id' => 6, 'pusat_id' => 2],
             ['user_id' => 7, 'pusat_id' => 3],
