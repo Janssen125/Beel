@@ -5,31 +5,28 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User_Pusat;
+use App\Services\UserService;
+use App\Http\Requests\User\StoreUserRequest;
+use App\Http\Requests\User\UpdateUserRequest;
 
 class UserController extends Controller
 {
+
+    protected UserService $userService;
+
+    public function __construct()
+    {
+        $this->userService = new UserService();
+    }
 
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $users = [];
-        $pusat_id = User_Pusat::where('user_id', Auth::user()->id)->first()->pusat_id;
+        $this->authorize('viewAny', User::class);
 
-        switch(Auth::user()->role){
-            case 'superadmin':
-                $users = User::orderBy('created_at', 'desc')->get();
-                break;
-            case 'admin':
-                $users = User::where('role', 'staff')->orderBy('created_at', 'desc')->whereHas('userPusats', function($query) use ($pusat_id) {
-                    $query->where('pusat_id', $pusat_id);
-                })->get();
-                break;
-            default:
-                abort(403);
-        }
+        $users = $this->userService->getAllUsers(Auth::user()->id);
 
         return view('pages.users.viewAllUsers', compact('users'));
     }
@@ -39,15 +36,23 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        $this->authorize('create', User::class);
+        return view('pages.users.createUser');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        //
+        $this->authorize('create', User::class);
+        $result = $this->userService->createUser($request->all());
+        if($result){
+            return redirect()->route('users.index')->with('success', 'User berhasil dibuat.');
+        }
+        else {
+            return redirect()->route('users.index')->with('error', 'User gagal dibuat.');
+        }
     }
 
     /**
@@ -56,25 +61,9 @@ class UserController extends Controller
     public function show(string $id)
     {
 
-        switch(Auth::user()->role){
-            case 'superadmin':
-                break;
-            case 'admin':
-                break;
-            default:
-                abort(403);
-        }
+        $user = $this->userService->getUserById($id);
 
-        $user = User::findOrFail($id);
-
-        $data_pusat_id = User_Pusat::where('user_id', $user->id)->first()->pusat_id;
-        $pusat_id = User_Pusat::where('user_id', Auth::user()->id)->first()->pusat_id;
-
-        if(Auth::user()->role == 'admin'){
-            if($user->role != 'staff' || $data_pusat_id != $pusat_id){
-                abort(403);
-            }
-        }
+        $this->authorize('view', $user);
 
         return view('pages.users.viewUserDetail', compact('user'));
     }
@@ -84,15 +73,25 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $user = $this->userService->getUserById($id);
+        $this->authorize('update', $user);
+
+        return view('pages.users.editUser', compact('user'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateUserRequest $request, string $id)
     {
-        //
+        $this->authorize('update', User::class);
+        $result = $this->userService->updateUser($id, $request->all());
+        if($result){
+            return redirect()->route('users.index')->with('success', 'User berhasil diubah.');
+        }
+        else {
+            return redirect()->route('users.index')->with('error', 'User gagal diubah.');
+        }
     }
 
     /**
@@ -100,6 +99,14 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $user = $this->userService->getUserById($id);
+        $this->authorize('delete', $user);
+        $result = $this->userService->deleteUser($id);
+        if($result){
+            return redirect()->route('users.index')->with('success', 'User berhasil dihapus.');
+        }
+        else {
+            return redirect()->route('users.index')->with('error', 'User gaga dihapus.');
+        }
     }
 }

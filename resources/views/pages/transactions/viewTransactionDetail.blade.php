@@ -6,18 +6,42 @@
         <h3 class="mb-5 text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-7">Detail Transaksi, ID =
             {{ $transaction->id }}</h3>
         <div x-data="{
-            saveProfile() {
-                    console.log('Saving profile...');
-                },
-                getStatusClass(status) {
-                    const classes = {
-                        'completed': 'bg-green-50 text-green-700 dark:bg-green-500/15 dark:text-green-500',
-                        'pending': 'bg-yellow-50 text-yellow-700 dark:bg-yellow-500/15 dark:text-yellow-400',
-                        'cancelled': 'bg-red-50 text-red-700 dark:bg-red-500/15 dark:text-red-500',
-                    };
-                    return classes[status] || '';
-                },
+            status: '{{ $transaction->status }}',
+            open: false,
+        
+            statuses: ['pending', 'completed', 'cancelled'],
+            getStatusClass(status) {
+                const classes = {
+                    'completed': 'bg-green-50 text-green-700 dark:bg-green-500/15 dark:text-green-500',
+                    'pending': 'bg-yellow-50 text-yellow-700 dark:bg-yellow-500/15 dark:text-yellow-400',
+                    'cancelled': 'bg-red-50 text-red-700 dark:bg-red-500/15 dark:text-red-500',
+                }
+                return classes[status] || '';
+            },
+            async updateStatus(newStatus) {
+                this.status = newStatus;
+                this.open = false;
+        
+                const response = await fetch('{{ route('transactions.updateStatus', $transaction->id) }}', {
+                    method: 'PATCH',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: new URLSearchParams({
+                        status: newStatus
+                    })
+                });
+        
+                if (!response.ok) {
+                    console.error('Failed to update status');
+                    return;
+                }
+        
+                window.location.reload();
+        
+            }
         }">
+
             <div class="p-5 mb-6 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
                 <div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
                     <div>
@@ -47,8 +71,30 @@
 
                             <div>
                                 <p class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">Status</p>
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
-                                    :class="getStatusClass('{{ $transaction->status }}')">{{ $transaction->status }}</span>
+                                <div class="relative inline-block">
+                                    <!-- Current status -->
+                                    <div class="flex flex-row hover:cursor-pointer" @click="open = !open">
+                                        <button class="px-3 py-1 text-xs font-semibold rounded-full"
+                                            :class="getStatusClass(status)" x-text="status">
+                                        </button>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 48 48" class="text-gray-500 dark:text-gray-400">
+                                            <path fill="none" stroke="currentColor" stroke-linecap="round"
+                                                stroke-linejoin="round" stroke-width="4" d="M36 18L24 30L12 18" />
+                                        </svg>
+                                    </div>
+
+                                    <!-- Dropdown -->
+                                    <div x-show="open" @click.outside="open = false"
+                                        class="absolute z-10 mt-2 w-32 rounded-lg border bg-white shadow dark:border-gray-700 dark:bg-gray-800">
+                                        <template x-for="s in statuses" :key="s">
+                                            <button @click="updateStatus(s)"
+                                                class="block w-full px-4 py-2 text-gray-700 dark:text-gray-100 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
+                                                x-text="s">
+                                            </button>
+                                        </template>
+                                    </div>
+                                </div>
                             </div>
 
                             <div>
@@ -77,11 +123,10 @@
                         </div>
                     </div>
 
-                    <button class="edit-button" @click="$dispatch('open-delete-modal', {{ $transaction->id }})"">
-                        <svg class="text-gray-700 cursor-pointer size-5 dark:text-gray-400" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    <button class="delete-button" @click="$dispatch('open-delete-modal', {{ $transaction->id }})"">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 26 26">
+                            <path fill="currentColor"
+                                d="M11.5-.031c-1.958 0-3.531 1.627-3.531 3.594V4H4c-.551 0-1 .449-1 1v1H2v2h2v15c0 1.645 1.355 3 3 3h12c1.645 0 3-1.355 3-3V8h2V6h-1V5c0-.551-.449-1-1-1h-3.969v-.438c0-1.966-1.573-3.593-3.531-3.593zm0 2.062h3c.804 0 1.469.656 1.469 1.531V4H10.03v-.438c0-.875.665-1.53 1.469-1.53zM6 8h5.125c.124.013.247.031.375.031h3c.128 0 .25-.018.375-.031H20v15c0 .563-.437 1-1 1H7c-.563 0-1-.437-1-1zm2 2v12h2V10zm4 0v12h2V10zm4 0v12h2V10z" />
                         </svg>
                         Hapus
                     </button>

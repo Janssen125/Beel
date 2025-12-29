@@ -135,7 +135,7 @@ window.addEventListener('resize', checkMobile);">
         @if (session('error')) show({ type: 'error', message: '{{ session('error') }}' }) @endif" class="fixed bottom-5 right-5 z-50 space-y-3">
             <template x-for="toast in toasts" :key="toast.id">
                 <div x-show="toast.visible" x-transition
-                    class="flex items-start gap-3 w-100 rounded-lg px-4 py-3 shadow-lg"
+                    class="flex items-start gap-3 w-full rounded-lg px-4 py-3 shadow-lg"
                     :class="toast.type === 'success' ?
                         'bg-green-300 text-green-700 border border-green-700' :
                         'bg-red-300 text-red-700 border border-red-700'">

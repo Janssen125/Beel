@@ -37,12 +37,6 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('superadmin')->group(function () {
         Route::middleware(['can:isSuperAdmin'])->group(function () {
             Route::get('dashboard', [App\Http\Controllers\SuperAdminController::class, 'index'])->name('superadmin.dashboard');
-            Route::get('users', [App\Http\Controllers\SuperAdminController::class, 'users'])->name('superadmin.users');
-            Route::get('transaction', [App\Http\Controllers\SuperAdminController::class, 'transactions'])->name('superadmin.transactions');
-            Route::get('fnb', [App\Http\Controllers\SuperAdminController::class, 'fnb'])->name('superadmin.fnb');
-            Route::get('pusat', [App\Http\Controllers\SuperAdminController::class, 'pusat'])->name('superadmin.pusat');
-            Route::get('kota', [App\Http\Controllers\SuperAdminController::class, 'kota'])->name('superadmin.kota');
-            Route::get('provinsi', [App\Http\Controllers\SuperAdminController::class, 'provinsi'])->name('superadmin.provinsi');
         });
     });
     Route::prefix('admin')->group(function () {
@@ -56,6 +50,8 @@ Route::middleware(['auth'])->group(function () {
         });
     });
 
+    Route::patch('/transaction/{id}/updateStatus', [App\Http\Controllers\TransactionController::class, 'updateStatus'])->name('transactions.updateStatus');
+    
     Route::resource('pusats', App\Http\Controllers\PusatController::class);
     Route::resource('users', App\Http\Controllers\UserController::class);
     Route::resource('fnb', App\Http\Controllers\FnBController::class);

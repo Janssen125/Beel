@@ -5,31 +5,28 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\TransactionHeader;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User_Pusat;
+use App\Services\TransactionService;
+use App\Http\Requests\Transaction\StoreTransactionRequest;
+use App\Http\Requests\Transaction\UpdateTransactionRequest;
 
 class TransactionController extends Controller
 {
+
+    protected TransactionService $transactionService;
+
+    public function __construct()
+    {
+        $this->transactionService = new TransactionService();
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $transactions = [];
-        $pusat_id = User_Pusat::where('user_id', Auth::user()->id)->first()->pusat_id;
+        $this->authorize('viewAny', TransactionHeader::class);
+        $transactions = $this->transactionService->getAllTransactions(Auth::user());
 
-        switch(Auth::user()->role){
-            case 'superadmin':
-                $transactions = TransactionHeader::with(['staff', 'pusat'])->orderBy('created_at', 'desc')->get();
-                break;
-            case 'admin':
-                $transactions = TransactionHeader::with(['staff', 'pusat'])->orderBy('created_at', 'desc')->where('pusat_id', $pusat_id)->get();
-                break;
-            case 'staff':
-                $transactions = TransactionHeader::with(['staff', 'pusat'])->orderBy('created_at', 'desc')->where('pusat_id', $pusat_id)->get();
-                break;
-            default:
-                abort(403);
-        }
         return view('pages.transactions.viewAllTransactions', compact('transactions'));
     }
 
@@ -38,15 +35,23 @@ class TransactionController extends Controller
      */
     public function create()
     {
-        //
+        $this->authorize('create', TransactionHeader::class);
+        return view('pages.transactions.createTransaction');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreTransactionRequest $request)
     {
-        //
+        $this->authorize('create', TransactionHeader::class);
+        $result = $this->transactionService->createTransaction($request->validated());
+        if($result) {
+            return redirect()->route('transactions.index')->with('success', 'Transaksi berhasil dibuat.');
+        }
+        else {
+            return redirect()->route('transactions.index')->with('error', 'Transaksi gagal dibuat.');
+        }
     }
 
     /**
@@ -54,7 +59,10 @@ class TransactionController extends Controller
      */
     public function show(string $id)
     {
-        $transaction = TransactionHeader::with(['staff', 'pusat', 'details'])->findOrFail($id);
+        $transaction = $this->transactionService->getTransactionById($id);
+
+        $this->authorize('view', $transaction);
+
         return view('pages.transactions.viewTransactionDetail', compact('transaction'));
     }
 
@@ -63,7 +71,7 @@ class TransactionController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        abort(404);
     }
 
     /**
@@ -71,19 +79,41 @@ class TransactionController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        abort(404);
     }
+
+    public function updateStatus(UpdateTransactionRequest $request, string $id)
+    {
+        $transaction = $this->transactionService->getTransactionById($id);
+        $this->authorize('update', $transaction);
+
+        $result = $this->transactionService->updateTransaction($id, $request->validated());
+
+        if (!$result) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal memperbarui transaksi.'
+            ], 422);
+        }
+
+        session()->flash('success', 'Transaksi berhasil diperbarui.');
+
+        return response()->json([
+            'success' => true
+        ]);
+    }
+
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
-        $transaction = TransactionHeader::findOrFail($id);
-        if($transaction){
-            $transaction->delete();
-        } else {
-            return redirect()->route('transactions.index')->with('error', 'Transaksi gagal dihapus.');
+        $transaction = $this->transactionService->getTransactionById($id);
+        $this->authorize('delete', $transaction);
+        $result = $this->transactionService->deleteTransaction($id);
+        if(!$result){
+            return redirect()->route('transactions.index')->with('error', 'Gagal menghapus transaksi.');
         }
         return redirect()->route('transactions.index')->with('success', 'Transaksi berhasil dihapus.');
     }

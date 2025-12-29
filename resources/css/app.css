@@ -29,6 +29,20 @@ input[type="password"]::-ms-clear {
     display: none !important;
 }
 
+.create-button {
+    @apply flex w-full items-center justify-center gap-2 rounded-full
+           px-4 py-3 text-sm font-medium shadow-theme-xs transition
+           lg:inline-flex lg:w-auto
+           bg-green-600 text-white
+           hover:bg-green-700
+           active:bg-green-800
+           focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2
+           dark:bg-green-500
+           dark:hover:bg-green-600
+           dark:active:bg-green-700
+           dark:focus:ring-green-400;
+}
+
 
 .edit-button {
     @apply flex w-full items-center justify-center gap-2 rounded-full border

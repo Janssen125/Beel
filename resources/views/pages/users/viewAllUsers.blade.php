@@ -97,6 +97,11 @@
                                 class="h-[42px] w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-[42px] pr-4 text-sm text-gray-100" />
                         </div>
                     </form>
+                    <a href="{{ route('users.create') }}">
+                        <button class="create-button">
+                            Tambah Pengguna
+                        </button>
+                    </a>
                 </div>
             </div>
 
