@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Detail Transaksi')
 @section('content')
-    <x-common.page-breadcrumb pageTitle="Detail Transaksi" />
+    <x-common.page-breadcrumb pageTitle="Detail Transaksi" :breadcrumbs="[['label' => 'Daftar Transaksi', 'url' => route('transactions.index')]]" />
     <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:p-6">
         <h3 class="mb-5 text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-7">Detail Transaksi, ID =
             {{ $transaction->id }}</h3>

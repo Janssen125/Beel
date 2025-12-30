@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Services\UserService;
+use App\Services\KotaService;
+use App\Services\ProvinsiService;
 use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 
@@ -13,10 +15,14 @@ class UserController extends Controller
 {
 
     protected UserService $userService;
+    protected KotaService $kotaService;
+    protected ProvinsiService $provinsiService;
 
     public function __construct()
     {
         $this->userService = new UserService();
+        $this->kotaService = new KotaService();
+        $this->provinsiService = new ProvinsiService();
     }
 
     /**
@@ -37,7 +43,9 @@ class UserController extends Controller
     public function create()
     {
         $this->authorize('create', User::class);
-        return view('pages.users.createUser');
+        $kotas = $this->kotaService->getAllKotas();
+        $provinsis = $this->provinsiService->getAllProvinsis();
+        return view('pages.users.createUser', compact(['kotas', 'provinsis']));
     }
 
     /**
@@ -46,7 +54,7 @@ class UserController extends Controller
     public function store(StoreUserRequest $request)
     {
         $this->authorize('create', User::class);
-        $result = $this->userService->createUser($request->all());
+        $result = $this->userService->createUser($request->validated());
         if($result){
             return redirect()->route('users.index')->with('success', 'User berhasil dibuat.');
         }
@@ -75,8 +83,9 @@ class UserController extends Controller
     {
         $user = $this->userService->getUserById($id);
         $this->authorize('update', $user);
-
-        return view('pages.users.editUser', compact('user'));
+        $kotas = $this->kotaService->getAllKotas();
+        $provinsis = $this->provinsiService->getAllProvinsis();
+        return view('pages.users.editUser', compact(['user', 'kotas', 'provinsis']));
     }
 
     /**
@@ -84,8 +93,9 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, string $id)
     {
-        $this->authorize('update', User::class);
-        $result = $this->userService->updateUser($id, $request->all());
+        $model = $this->userService->getUserById($id);
+        $this->authorize('update', $model);
+        $result = $this->userService->updateUser($id, $request->validated());
         if($result){
             return redirect()->route('users.index')->with('success', 'User berhasil diubah.');
         }

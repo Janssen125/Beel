@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Daftar Transaksi')
 @section('content')
+    <x-common.page-breadcrumb pageTitle="Daftar Transaksi" />
     <div x-data="{
         transactions: [
             @foreach ($transactions as $t)
@@ -109,6 +110,11 @@
                                 class="h-[42px] w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-[42px] pr-4 text-sm text-gray-100" />
                         </div>
                     </form>
+                    <a href="{{ route('transactions.create') }}">
+                        <button class="create-button">
+                            Tambah Transaksi
+                        </button>
+                    </a>
                 </div>
             </div>
 

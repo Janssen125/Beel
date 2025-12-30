@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Daftar Pengguna')
 @section('content')
+    <x-common.page-breadcrumb pageTitle="Daftar Pengguna" />
     <div x-data="{
         users: [
             @foreach ($users as $u)

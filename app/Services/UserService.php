@@ -32,6 +32,9 @@ class UserService {
     }
 
     public function updateUser($id, $data) {
+        if($data['password'] == null) {
+            unset($data['password']);
+        }
         return $this->userRepository->updateUser($id, $data);
     }
 

@@ -22,8 +22,4 @@ class Provinsi extends Model
         return $this->hasMany(Pusat::class, 'provinsi_id');
     }
 
-    public function users()
-    {
-        return $this->hasMany(User::class, 'provinsi_id');
-    }
 }

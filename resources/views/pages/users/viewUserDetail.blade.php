@@ -1,87 +1,91 @@
 @extends('layouts.app')
 @section('title', 'Detail Pengguna')
 @section('content')
-    <x-common.page-breadcrumb pageTitle="Detail Pengguna" />
+    <x-common.page-breadcrumb pageTitle="Detail Pengguna" :breadcrumbs="[['label' => 'Daftar Pengguna', 'url' => route('users.index')]]" />
     <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:p-6">
         <h3 class="mb-5 text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-7">Detail Pengguna, {{ $user->name }}
         </h3>
-        <div x-data="{
-            saveProfile() {
-                console.log('Saving profile...');
-            },
-        }">
-            <div class="p-5 mb-6 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
-                <div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+        <div class="p-5 mb-6 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
+            <div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+                <div>
                     <div>
-                        <div>
-                            <p class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">Foto
-                                Pengguna</p>
-                            <div class="mb-5">
-                                @if ($user->profile_photo)
-                                    <img src="{{ asset('storage/' . $user->profile_photo) }}" alt="Profile Photo"
-                                        class="h-24 w-24 rounded-full object-cover">
-                                @else
-                                    <div
-                                        class="flex h-24 w-24 items-center justify-center rounded-full bg-gray-200 dark:bg-gray-800">
-                                        <span class="text-gray-500 dark:text-gray-400">No Image</span>
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-1 gap-4 lg:grid-cols-4 lg:gap-7 2xl:gap-x-32">
-                            <div>
-                                <p class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">Nama</p>
-                                <p class="text-sm font-medium text-gray-800 dark:text-white/90">
-                                    {{ $user->name ?? '-' }} (id = {{ $user->id ?? '-' }})</p>
-                            </div>
-
-                            <div>
-                                <p class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">Email</p>
-                                <p class="text-sm font-medium text-gray-800 dark:text-white/90">
-                                    {{ $user->email ?? '-' }}</p>
-                            </div>
-
-                            <div>
-                                <p class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">Role</p>
-                                <p class="text-sm font-medium text-gray-800 dark:text-white/90">
-                                    {{ $user->role ?? '-' }}</p>
-                            </div>
-
-                            <div>
-                                <p class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">Tanggal Lahir</p>
-                                <p class="text-sm font-medium text-gray-800 dark:text-white/90">
-                                    {{ $user->dob ?? '-' }}</p>
-                            </div>
-
-                            <div>
-                                <p class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">Jenis Kelamin</p>
-                                <p class="text-sm font-medium text-gray-800 dark:text-white/90">
-                                    {{ $user->gender ?? '-' }}</p>
-                            </div>
-
-                            <div>
-                                <p class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">Nomor HP</p>
-                                <p class="text-sm font-medium text-gray-800 dark:text-white/90">
-                                    {{ $user->phone ?? '-' }}</p>
-                            </div>
-
-                            <div>
-                                <p class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">Alamat</p>
-                                <p class="text-sm font-medium text-gray-800 dark:text-white/90">
-                                    {{ $user->address ?? '-' }}, {{ $user->kota->nama_kota ?? '-' }},
-                                    {{ $user->provinsi->nama_provinsi ?? '-' }}</p>
-                            </div>
-
-                            <div>
-                                <p class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">NIK</p>
-                                <p class="text-sm font-medium text-gray-800 dark:text-white/90">
-                                    {{ $user->nik ?? '-' }}</p>
-                            </div>
+                        <p class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">Foto
+                            Pengguna</p>
+                        <div class="mb-5">
+                            @if ($user->profile_photo)
+                                <img src="{{ asset('storage/' . $user->profile_photo) }}" alt="Profile Photo"
+                                    class="h-24 w-24 rounded-full object-cover">
+                            @else
+                                <div
+                                    class="flex h-24 w-24 items-center justify-center rounded-full bg-gray-200 dark:bg-gray-800">
+                                    <span class="text-gray-500 dark:text-gray-400">No Image</span>
+                                </div>
+                            @endif
                         </div>
                     </div>
+                    <div class="grid grid-cols-1 gap-4 lg:grid-cols-4 lg:gap-7 2xl:gap-x-32">
+                        <div>
+                            <p class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">Nama</p>
+                            <p class="text-sm font-medium text-gray-800 dark:text-white/90">
+                                {{ $user->name ?? '-' }} (id = {{ $user->id ?? '-' }})</p>
+                        </div>
 
-                    @if (!(Auth::user()->id == $user->id))
-                        <div class="flex gap-2 flex-row">
+                        <div>
+                            <p class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">Email</p>
+                            <p class="text-sm font-medium text-gray-800 dark:text-white/90">
+                                {{ $user->email ?? '-' }}</p>
+                        </div>
+
+                        <div>
+                            <p class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">Role</p>
+                            <p class="text-sm font-medium text-gray-800 dark:text-white/90">
+                                {{ $user->role ?? '-' }}</p>
+                        </div>
+
+                        <div>
+                            <p class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">Tanggal Lahir</p>
+                            <p class="text-sm font-medium text-gray-800 dark:text-white/90">
+                                {{ $user->dob ?? '-' }}</p>
+                        </div>
+
+                        <div>
+                            <p class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">Jenis Kelamin</p>
+                            <p class="text-sm font-medium text-gray-800 dark:text-white/90">
+                                @if ($user->gender)
+                                    @if ($user->gender == 'male')
+                                        Pria
+                                    @else
+                                        Wanita
+                                    @endif
+                                @else
+                                    -
+                                @endif
+                            </p>
+                        </div>
+
+                        <div>
+                            <p class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">Nomor HP</p>
+                            <p class="text-sm font-medium text-gray-800 dark:text-white/90">
+                                {{ $user->phone ?? '-' }}</p>
+                        </div>
+
+                        <div>
+                            <p class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">Alamat</p>
+                            <p class="text-sm font-medium text-gray-800 dark:text-white/90">
+                                {{ $user->address ?? '-' }}, {{ $user->kota->nama_kota ?? '-' }},
+                                {{ $user->kota->provinsi->nama_provinsi ?? '-' }}</p>
+                        </div>
+
+                        <div>
+                            <p class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">NIK</p>
+                            <p class="text-sm font-medium text-gray-800 dark:text-white/90">
+                                {{ $user->nik ?? '-' }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex gap-2 flex-row">
+                    @can('update', $user)
+                        <a href="{{ route('users.edit', $user->id) }}">
                             <button class="edit-button" @click="$dispatch('open-edit-modal', {{ $user->id }})"">
                                 <svg class="fill-current" width="18" height="18" viewBox="0 0 18 18" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -91,58 +95,21 @@
                                 </svg>
                                 Edit
                             </button>
-                            @if (!($user->role == 'superadmin' || Auth::user()->role == $user->role))
-                                @php
-                                    $currentUserRole = 0;
-                                    $dataUserRole = 0;
-
-                                    switch (Auth::user()->role) {
-                                        case 'superadmin':
-                                            $currentUserRole = 3;
-                                            break;
-                                        case 'admin':
-                                            $currentUserRole = 2;
-                                            break;
-                                        case 'user':
-                                            $currentUserRole = 1;
-                                            break;
-                                        default:
-                                            $currentUserRole = 0;
-                                            break;
-                                    }
-
-                                    switch ($user->role) {
-                                        case 'superadmin':
-                                            $dataUserRole = 3;
-                                            break;
-                                        case 'admin':
-                                            $dataUserRole = 2;
-                                            break;
-                                        case 'staff':
-                                            $dataUserRole = 1;
-                                            break;
-                                        default:
-                                            $dataUserRole = 0;
-                                            break;
-                                    }
-                                @endphp
-                                @if ($currentUserRole > $dataUserRole)
-                                    <button class="delete-button"
-                                        @click="$dispatch('open-delete-modal', {{ $user->id }})"">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
-                                            viewBox="0 0 26 26">
-                                            <path fill="currentColor"
-                                                d="M11.5-.031c-1.958 0-3.531 1.627-3.531 3.594V4H4c-.551 0-1 .449-1 1v1H2v2h2v15c0 1.645 1.355 3 3 3h12c1.645 0 3-1.355 3-3V8h2V6h-1V5c0-.551-.449-1-1-1h-3.969v-.438c0-1.966-1.573-3.593-3.531-3.593zm0 2.062h3c.804 0 1.469.656 1.469 1.531V4H10.03v-.438c0-.875.665-1.53 1.469-1.53zM6 8h5.125c.124.013.247.031.375.031h3c.128 0 .25-.018.375-.031H20v15c0 .563-.437 1-1 1H7c-.563 0-1-.437-1-1zm2 2v12h2V10zm4 0v12h2V10zm4 0v12h2V10z" />
-                                        </svg>
-                                        Hapus
-                                    </button>
-                                @endif
-                            @endif
-                        </div>
-                    @endif
+                        </a>
+                    @endcan
+                    @can('delete', $user)
+                        <button class="delete-button" @click="$dispatch('open-delete-modal', {{ $user->id }})"">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 26 26">
+                                <path fill="currentColor"
+                                    d="M11.5-.031c-1.958 0-3.531 1.627-3.531 3.594V4H4c-.551 0-1 .449-1 1v1H2v2h2v15c0 1.645 1.355 3 3 3h12c1.645 0 3-1.355 3-3V8h2V6h-1V5c0-.551-.449-1-1-1h-3.969v-.438c0-1.966-1.573-3.593-3.531-3.593zm0 2.062h3c.804 0 1.469.656 1.469 1.531V4H10.03v-.438c0-.875.665-1.53 1.469-1.53zM6 8h5.125c.124.013.247.031.375.031h3c.128 0 .25-.018.375-.031H20v15c0 .563-.437 1-1 1H7c-.563 0-1-.437-1-1zm2 2v12h2V10zm4 0v12h2V10zm4 0v12h2V10z" />
+                            </svg>
+                            Hapus
+                        </button>
+                    @endcan
                 </div>
             </div>
         </div>
+    </div>
     </div>
     <div x-data="{
         open: false,

@@ -25,7 +25,6 @@ return new class extends Migration
             $table->string('nik')->nullable();
             $table->string('profile_photo')->nullable();
             $table->foreignId('kota_id')->nullable()->constrained('kotas')->onDelete('set null');
-            $table->foreignId('provinsi_id')->nullable()->constrained('provinsis')->onDelete('set null');
             $table->rememberToken();
             $table->timestamps();
         });

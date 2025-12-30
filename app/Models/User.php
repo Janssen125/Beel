@@ -29,7 +29,6 @@ class User extends Authenticatable
         'nik',
         'profile_photo',
         'kota_id',
-        'provinsi_id',
     ];
 
     /**
@@ -74,10 +73,4 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Kota::class, 'kota_id');
     }
-
-    public function provinsi()
-    {
-        return $this->belongsTo(Provinsi::class, 'provinsi_id');
-    }
-
 }

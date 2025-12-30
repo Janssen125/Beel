@@ -1,0 +1,29 @@
+<?php
+
+namespace App\Http\Requests\Kota;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+class UpdateKotaRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     */
+    public function rules(): array
+    {
+        return [
+            'nama_kota' => 'required|string|max:255|unique:kotas,nama_kota,' . $this->route('kota')->id,
+            'provinsi_id' => 'required|exists:provinsis,id',
+        ];
+    }
+}
