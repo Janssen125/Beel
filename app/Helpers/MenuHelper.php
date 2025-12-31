@@ -25,20 +25,18 @@ class MenuHelper
             [
                 'icon' => 'pusat',
                 'name' => 'Daftar Pusat',
-                'path' => '/superadmin/pusat',
+                'path' => '/pusats/',
             ],
             [
                 'icon' => 'fnb',
                 'name' => 'Daftar Makanan & Minuman',
-                'path' => '/superadmin/fnb',
+                'path' => '/fnbs/',
             ],
             [
                 'icon' => 'location',
-                'name' => 'Kota & Provinsi',
-                'subItems' => [
-                    ['name' => 'Daftar Kota', 'path' => '/superadmin/kotas', 'pro' => false],
-                    ['name' => 'Daftar Provinsi', 'path' => '/superadmin/provinsis', 'pro' => false],
-                ],
+                'name' => 'Daftar Kota',
+                'path' => '/kotas/',
+
             ],
         ];
     }

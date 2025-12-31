@@ -15,15 +15,19 @@ class KotaService {
         return $this->kotaRepository->getAllKotas();
     }
 
+    public function getKotaById($id) {
+        return $this->kotaRepository->getKotaById($id);
+    }
+
     public function createKota($data) {
         return $this->kotaRepository->createKota($data);
     }
 
-    public function updateKota($kota, $data) {
-        return $this->kotaRepository->updateKota($kota, $data);
+    public function updateKota($id, $data) {
+        return $this->kotaRepository->updateKota($id, $data);
     }
 
-    public function deleteKota($kota) {
-        return $this->kotaRepository->deleteKota($kota);
+    public function deleteKota($id) {
+        return $this->kotaRepository->deleteKota($id);
     }
 }

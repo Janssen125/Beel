@@ -51,12 +51,11 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::patch('/transaction/{id}/updateStatus', [App\Http\Controllers\TransactionController::class, 'updateStatus'])->name('transactions.updateStatus');
-    
+
     Route::resource('pusats', App\Http\Controllers\PusatController::class);
     Route::resource('users', App\Http\Controllers\UserController::class);
-    Route::resource('fnb', App\Http\Controllers\FnBController::class);
+    Route::resource('fnbs', App\Http\Controllers\FnBController::class);
     Route::resource('kotas', App\Http\Controllers\KotaController::class);
-    Route::resource('provinsis', App\Http\Controllers\ProvinsiController::class);
     Route::resource('jenis_mejas', App\Http\Controllers\JenisMejaController::class);
     Route::resource('mejas', App\Http\Controllers\MejaController::class);
     Route::resource('transactions', App\Http\Controllers\TransactionController::class);

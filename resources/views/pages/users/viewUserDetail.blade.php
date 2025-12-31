@@ -110,7 +110,6 @@
             </div>
         </div>
     </div>
-    </div>
     <div x-data="{
         open: false,
         userId: null
@@ -119,7 +118,7 @@
         open = true;
         userId = $event.detail.id;
     " x-show="open"
-        x-transition class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+        x-transition class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 dark:bg-white/30">
         <!-- Modal box -->
         <div @click.outside="open = false" class="w-full max-w-md rounded-xl bg-white p-6 dark:bg-gray-900">
             <h2 class="text-lg font-semibold text-gray-800 dark:text-white">

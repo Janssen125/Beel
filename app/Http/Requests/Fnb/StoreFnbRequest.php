@@ -1,18 +1,17 @@
 <?php
 
-namespace App\Http\Requests\Kota;
+namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class UpdateKotaRequest extends FormRequest
+class StoreFnbRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -22,15 +21,8 @@ class UpdateKotaRequest extends FormRequest
      */
     public function rules(): array
     {
-        $kotaId = $this->route('kota');
         return [
-            'nama_kota' => [
-                'required',
-                'string',
-                'max:255',
-                Rule::unique('kotas', 'nama_kota')->ignore($kotaId),
-            ],
-            'provinsi_id' => 'required|exists:provinsis,id',
+            //
         ];
     }
 }

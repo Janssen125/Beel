@@ -50,7 +50,7 @@ class TransactionController extends Controller
             return redirect()->route('transactions.index')->with('success', 'Transaksi berhasil dibuat.');
         }
         else {
-            return redirect()->route('transactions.index')->with('error', 'Transaksi gagal dibuat.');
+            return redirect()->back()->with('error', 'Transaksi gagal dibuat.');
         }
     }
 
@@ -115,7 +115,7 @@ class TransactionController extends Controller
         if(!$result){
             return redirect()->route('transactions.index')->with('error', 'Gagal menghapus transaksi.');
         }
-        return redirect()->route('transactions.index')->with('success', 'Transaksi berhasil dihapus.');
+        return redirect()->back()->with('success', 'Transaksi berhasil dihapus.');
     }
 
 }

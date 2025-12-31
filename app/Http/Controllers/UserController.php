@@ -59,7 +59,7 @@ class UserController extends Controller
             return redirect()->route('users.index')->with('success', 'User berhasil dibuat.');
         }
         else {
-            return redirect()->route('users.index')->with('error', 'User gagal dibuat.');
+            return redirect()->back()->with('error', 'User gagal dibuat.');
         }
     }
 
@@ -100,7 +100,7 @@ class UserController extends Controller
             return redirect()->route('users.index')->with('success', 'User berhasil diubah.');
         }
         else {
-            return redirect()->route('users.index')->with('error', 'User gagal diubah.');
+            return redirect()->back()->with('error', 'User gagal diubah.');
         }
     }
 
@@ -116,7 +116,7 @@ class UserController extends Controller
             return redirect()->route('users.index')->with('success', 'User berhasil dihapus.');
         }
         else {
-            return redirect()->route('users.index')->with('error', 'User gaga dihapus.');
+            return redirect()->bcak()->with('error', 'User gaga dihapus.');
         }
     }
 }

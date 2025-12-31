@@ -1,17 +1,16 @@
 @extends('layouts.app')
-@section('title', 'Daftar Kota')
+@section('title', 'Daftar Makanan & Minuman')
 @section('content')
-    <x-common.page-breadcrumb pageTitle="Daftar Kota" />
+    <x-common.page-breadcrumb pageTitle="Daftar Makanan & Minuman" />
     <div x-data="{
-        kotas: [
-            @foreach ($kotas as $k)
+        fnbs: [
+            @foreach ($fnbs as $fnb)
         {
-            'id': {{ $k->id }},
-            'nama_kota': '{{ $k->nama_kota ?? '-' }}',
-            'provinsi' : {
-                'id': {{ $k->provinsi->id ?? 'null' }},
-                'nama_provinsi': '{{ $k->provinsi->nama_provinsi ?? '-' }}'
-            }
+            'id': {{ $fnb->id }},
+            'nama_fnb': '{{ $fnb->nama_fnb ?? '-' }}',
+            'harga': '{{ $fnb->harga ?? '-' }}',
+            'deskripsi': '{{ $fnb->deskripsi ?? '-' }}',
+            'foto_fnb': '{{ $fnb->foto_fnb ?? '../images/user/user-02.jpg' }}'
         }@if (!$loop->last),@endif @endforeach
         ],
     
@@ -22,24 +21,25 @@
         currentPage: 1,
         dropdownOpen: null,
     
-        get filteredKotas() {
-            if (!this.search) return this.kotas;
+        get filteredFnbs() {
+            if (!this.search) return this.fnbs;
     
             const q = this.search.toLowerCase();
     
-            return this.kotas.filter(k =>
-                k.nama_kota.toLowerCase().includes(q) ||
-                k.provinsi.nama_provinsi.toLowerCase().includes(q)
+            return this.fnbs.filter(fnb =>
+                fnb.nama_fnb.toLowerCase().includes(q) ||
+                fnb.harga.toLowerCase().includes(q) ||
+                fnb.deskripsi.toLowerCase().includes(q)
             );
         },
     
         get totalPages() {
-            return Math.ceil(this.filteredKotas.length / this.itemsPerPage);
+            return Math.ceil(this.filteredFnbs.length / this.itemsPerPage);
         },
     
-        get paginatedKotas() {
+        get paginatedFnbs() {
             const start = (this.currentPage - 1) * this.itemsPerPage;
-            return this.filteredKotas.slice(start, start + this.itemsPerPage);
+            return this.filteredFnbs.slice(start, start + this.itemsPerPage);
         },
     
         get displayedPages() {
@@ -74,45 +74,13 @@
         },
         toggleDropdown(id) {
             this.dropdownOpen = this.dropdownOpen === id ? null : id;
-        },
-    
-        showCreateModal: false,
-        showEditModal: false,
-    
-        form: {
-            id: null,
-            nama_kota: '',
-            provinsi_id: ''
-        },
-    
-        openCreateModal() {
-            this.form = {
-                id: null,
-                nama_kota: '',
-                provinsi_id: ''
-            };
-            this.showCreateModal = true;
-        },
-    
-        openEditModal(kota) {
-            this.form.id = kota.id;
-            this.form.nama_kota = kota.nama_kota;
-            this.form.provinsi_id = kota.provinsi.id;
-    
-            this.showEditModal = true;
-        },
-    
-        closeModal() {
-            this.showCreateModal = false;
-            this.showEditModal = false;
         }
-    
     }">
         <div class="rounded-2xl border border-gray-200 bg-white pt-4 dark:border-gray-800 dark:bg-white/[0.03]">
             <!-- Header -->
             <div class="flex flex-col gap-2 px-5 mb-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Daftar Kota</h3>
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Daftar Makanan & Minuman</h3>
                 </div>
                 <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
                     <form>
@@ -130,9 +98,13 @@
                                 class="h-[42px] w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-[42px] pr-4 text-sm text-gray-100" />
                         </div>
                     </form>
-                    <button class="create-button" @click="openCreateModal()">
-                        Tambah Kota
-                    </button>
+                    @can('create', $fnbs)
+                        <a href="{{ route('fnbs.create') }}">
+                            <button class="create-button">
+                                Tambah Makanan & Minuman
+                            </button>
+                        </a>
+                    @endcan
                 </div>
             </div>
 
@@ -147,10 +119,16 @@
                                     ID</th>
                                 <th scope="col"
                                     class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                                    Nama Kota</th>
+                                    Nama Makanan / Minuman</th>
                                 <th scope="col"
                                     class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                                    Nama Provinsi</th>
+                                    Harga</th>
+                                <th scope="col"
+                                    class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                                    Deskripsi</th>
+                                <th scope="col"
+                                    class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                                    Foto Makanan / Minuman</th>
                                 <th scope="col"
                                     class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">
                                     <span class="sr-only">Aksi</span>
@@ -158,29 +136,50 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                            <template x-for="kota in paginatedKotas" :key="kota.id">
+                            <template x-for="fnb in paginatedFnbs" :key="fnb.id">
                                 <tr>
                                     <td class="px-4 py-4 whitespace-nowrap">
                                         <div class="flex items-center justify-center">
-                                            <div class="text-sm text-gray-500 dark:text-gray-400" x-text="kota.id">
+                                            <div class="text-sm text-gray-500 dark:text-gray-400" x-text="fnb.id">
                                             </div>
                                         </div>
                                     </td>
                                     <td class="px-4 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-500 dark:text-gray-400" x-text="kota.nama_kota">
+                                        <div class="text-sm text-gray-500 dark:text-gray-400" x-text="fnb.nama_fnb">
                                         </div>
                                     </td>
                                     <td class="px-4 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-500 dark:text-gray-400"
-                                            x-text="kota.provinsi.nama_provinsi">
+                                        <div class="text-sm text-gray-500 dark:text-gray-400" x-text="fnb.harga">
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-500 dark:text-gray-400" x-text="fnb.deskripsi">
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-4 whitespace-nowrap">
+                                        <div class="flex items-center justify-center">
+                                            <div class="w-10 h-10 overflow-hidden rounded-full">
+                                                <img :src="fnb.foto_fnb" :alt="fnb.name">
+                                            </div>
                                         </div>
                                     </td>
                                     <td class="px-4 py-4 text-sm font-medium text-right whitespace-nowrap">
-                                        <div class="flex justify-center relative">
-                                            <x-ui.button variant="outline" @click="openEditModal(kota)">
-                                                Ubah
-                                            </x-ui.button>
-                                        </div>
+                                        @can('update', \App\Models\Fnb::class)
+                                            <div class="flex justify-center relative">
+                                                <a :href="`/fnbs/${fnb.id}/edit`">
+                                                    <x-ui.button variant="outline">
+                                                        Edit
+                                                    </x-ui.button>
+                                                </a>
+                                            </div>
+                                        @endcan
+                                        @can('delete', \App\Models\Fnb::class)
+                                            <button class="delete-button"
+                                                @click="$dispatch('open-delete-modal', { id: fnb.id })">
+                                                Hapus
+                                            </button>
+                                        @endcan
+
                                     </td>
                                 </tr>
                             </template>
@@ -236,90 +235,41 @@
                 </div>
             </div>
         </div>
-        <!-- CREATE MODAL -->
-        <div x-show="showCreateModal" x-transition
-            class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 dark:bg-white/30 dark:text-gray-400"
-            @keydown.escape.window="closeModal()">
-            <div @click.outside="closeModal()" class="w-full max-w-md rounded-xl bg-white p-6 dark:bg-gray-900">
-
-                <h3 class="mb-4 text-lg font-semibold text-gray-800 dark:text-white">
-                    Tambah Kota
-                </h3>
-
-                <form method="POST" action="{{ route('kotas.store') }}">
-                    @csrf
-
-                    <div class="mb-4">
-                        <label class="block mb-1 text-sm">Nama Kota</label>
-                        <input type="text" name="nama_kota" x-model="form.nama_kota"
-                            class="w-full rounded-lg border px-3 py-2">
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="block mb-1 text-sm">Provinsi</label>
-                        <select name="provinsi_id" x-model="form.provinsi_id" class="w-full rounded-lg border px-3 py-2">
-                            @foreach ($provinsis as $provinsi)
-                                <option value="{{ $provinsi->id }}">
-                                    {{ $provinsi->nama_provinsi }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="flex justify-end gap-2">
-                        <button type="button" @click="closeModal()" class="px-4 py-2 rounded-lg border">
-                            Batal
-                        </button>
-                        <button type="submit" class="px-4 py-2 rounded-lg bg-blue-600 text-white">
-                            Simpan
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <!-- EDIT MODAL -->
-        <div x-show="showEditModal" x-transition
-            class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 dark:bg-white/30 dark:text-gray-400"
-            @keydown.escape.window="closeModal()">
-            <div @click.outside="closeModal()" class="w-full max-w-md rounded-xl bg-white p-6 dark:bg-gray-900">
-
-                <h3 class="mb-4 text-lg font-semibold text-gray-800 dark:text-white">
-                    Ubah Kota
-                </h3>
-
-                <form :action="`/kotas/${form.id}`" method="POST">
-                    @csrf
-                    @method('PUT')
-
-                    <div class="mb-4">
-                        <label class="block mb-1 text-sm">Nama Kota</label>
-                        <input type="text" name="nama_kota" x-model="form.nama_kota"
-                            class="w-full rounded-lg border px-3 py-2">
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="block mb-1 text-sm">Provinsi</label>
-                        <select name="provinsi_id" x-model="form.provinsi_id" class="w-full rounded-lg border px-3 py-2">
-                            @foreach ($provinsis as $provinsi)
-                                <option value="{{ $provinsi->id }}">
-                                    {{ $provinsi->nama_provinsi }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="flex justify-end gap-2">
-                        <button type="button" @click="closeModal()" class="px-4 py-2 rounded-lg border">
-                            Batal
-                        </button>
-                        <button type="submit" class="px-4 py-2 rounded-lg bg-blue-600 text-white">
-                            Update
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
     </div>
+    <div x-data="{
+        open: false,
+        fnbId: null
+    }"
+        x-on:open-delete-modal.window="
+        open = true;
+        fnbId = $event.detail.id;
+    " x-show="open"
+        x-transition class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 dark:bg-white/30">
+        <!-- Modal box -->
+        <div @click.outside="open = false" class="w-full max-w-md rounded-xl bg-white p-6 dark:bg-gray-900">
+            <h2 class="text-lg font-semibold text-gray-800 dark:text-white">
+                Hapus Makanan / Minuman
+            </h2>
 
+            <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                Apakah anda yakin ingin menghapus makanan / minuman ini? Tindakan ini tidak dapat dibatalkan.
+            </p>
+
+            <div class="mt-6 flex justify-end gap-3">
+                <button @click="open = false"
+                    class="rounded-lg border px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-white/5">
+                    Cancel
+                </button>
+
+                <form :action="`/fnbs/${fnbId}`" method="POST">
+                    @csrf
+                    @method('DELETE')
+
+                    <button type="submit" class="rounded-lg bg-red-600 px-4 py-2 text-sm text-white hover:bg-red-700">
+                        Hapus
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
