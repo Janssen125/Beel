@@ -9,11 +9,13 @@ use App\Models\TransactionHeader;
 use App\Models\Provinsi;
 use App\Models\Kota;
 use App\Models\FnB;
+use App\Models\Pusat;
 use App\Policies\UserPolicy;
 use App\Policies\TransactionPolicy;
 use App\Policies\ProvinsiPolicy;
 use App\Policies\KotaPolicy;
 use App\Policies\FnbPolicy;
+use App\Policies\PusatPolicy;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -24,6 +26,7 @@ class AuthServiceProvider extends ServiceProvider
         Provinsi::class => ProvinsiPolicy::class,
         Kota::class => KotaPolicy::class,
         FnB::class => FnbPolicy::class,
+        Pusat::class => PusatPolicy::class,
     ];
 
     /**

@@ -1,16 +1,22 @@
 @extends('layouts.app')
-@section('title', 'Daftar Pengguna')
+@section('title', 'Daftar Pusat')
 @section('content')
-    <x-common.page-breadcrumb pageTitle="Daftar Pengguna" />
+    <x-common.page-breadcrumb pageTitle="Daftar Pusat" />
     <div x-data="{
-        users: [
-            @foreach ($users as $u)
+        pusats: [
+            @foreach ($pusats as $p)
         {
-            'id': {{ $u->id }},
-            'name': '{{ $u->name ?? '-' }}',
-            'email': '{{ $u->email ?? '-' }}',
-            'role': '{{ $u->role ?? '-' }}',
-            'profile_photo': '{{ $u->profile_photo ?? '../images/user/user-01.jpg' }}'
+            'id': {{ $p->id }},
+            'nama_pusat': '{{ $p->nama_pusat ?? '-' }}',
+            'alamat': '{{ $p->alamat ?? '-' }}',
+            'pemilik': {
+                'pemilik_id': '{{ $p->pemilik->id ?? '-' }}',
+                'nama_pemilik': '{{ $p->pemilik->name ?? '-' }}'
+            },
+            'kota': {
+                'kota_id': '{{ $p->kota->id ?? '-' }}',
+                'nama_kota': '{{ $p->kota->nama_kota ?? '-' }}'
+            },
         }@if (!$loop->last),@endif @endforeach
         ],
     
@@ -21,25 +27,26 @@
         currentPage: 1,
         dropdownOpen: null,
     
-        get filteredUsers() {
-            if (!this.search) return this.users;
+        get filteredPusats() {
+            if (!this.search) return this.pusats;
     
             const q = this.search.toLowerCase();
     
-            return this.users.filter(u =>
-                u.name.toLowerCase().includes(q) ||
-                u.email.toLowerCase().includes(q) ||
-                u.role.toLowerCase().includes(q)
+            return this.pusats.filter(fnb =>
+                fnb.nama_pusat.toLowerCase().includes(q) ||
+                fnb.alamat.toLowerCase().includes(q) ||
+                fnb.pemilik.nama_pemilik.toLowerCase().includes(q) ||
+                fnb.kota.nama_kota.toLowerCase().includes(q)
             );
         },
     
         get totalPages() {
-            return Math.ceil(this.filteredUsers.length / this.itemsPerPage);
+            return Math.ceil(this.filteredPusats.length / this.itemsPerPage);
         },
     
-        get paginatedUsers() {
+        get paginatedPusats() {
             const start = (this.currentPage - 1) * this.itemsPerPage;
-            return this.filteredUsers.slice(start, start + this.itemsPerPage);
+            return this.filteredPusats.slice(start, start + this.itemsPerPage);
         },
     
         get displayedPages() {
@@ -80,7 +87,7 @@
             <!-- Header -->
             <div class="flex flex-col gap-2 px-5 mb-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Daftar Pengguna</h3>
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Daftar Pusat</h3>
                 </div>
                 <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
                     <form>
@@ -98,10 +105,10 @@
                                 class="h-[42px] w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-[42px] pr-4 text-sm text-gray-100" />
                         </div>
                     </form>
-                    @can('create', $users)
-                        <a href="{{ route('users.create') }}">
+                    @can('create', \App\Models\Pusat::class)
+                        <a href="{{ route('pusats.create') }}">
                             <button class="create-button">
-                                Tambah Pengguna
+                                Tambah Pusat
                             </button>
                         </a>
                     @endcan
@@ -119,16 +126,16 @@
                                     ID</th>
                                 <th scope="col"
                                     class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                                    Nama</th>
+                                    Nama Pusat</th>
                                 <th scope="col"
                                     class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                                    Email</th>
+                                    ALamat</th>
                                 <th scope="col"
                                     class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                                    Role</th>
+                                    Nama Pemilik</th>
                                 <th scope="col"
                                     class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                                    Profile Photo</th>
+                                    Nama Kota</th>
                                 <th scope="col"
                                     class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">
                                     <span class="sr-only">Aksi</span>
@@ -136,38 +143,37 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                            <template x-for="user in paginatedUsers" :key="user.id">
+                            <template x-for="pusat in paginatedPusats" :key="pusat.id">
                                 <tr>
                                     <td class="px-4 py-4 whitespace-nowrap">
                                         <div class="flex items-center justify-center">
-                                            <div class="text-sm text-gray-500 dark:text-gray-400" x-text="user.id">
+                                            <div class="text-sm text-gray-500 dark:text-gray-400" x-text="pusat.id">
                                             </div>
                                         </div>
                                     </td>
                                     <td class="px-4 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-500 dark:text-gray-400" x-text="user.name">
+                                        <div class="text-sm text-gray-500 dark:text-gray-400" x-text="pusat.nama_pusat">
                                         </div>
                                     </td>
                                     <td class="px-4 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-500 dark:text-gray-400" x-text="user.email">
+                                        <div class="text-sm text-gray-500 dark:text-gray-400" x-text="pusat.alamat">
                                         </div>
                                     </td>
                                     <td class="px-4 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-500 dark:text-gray-400" x-text="user.role">
+                                        <div class="text-sm text-gray-500 dark:text-gray-400"
+                                            x-text="pusat.pemilik.nama_pemilik">
                                         </div>
                                     </td>
                                     <td class="px-4 py-4 whitespace-nowrap">
-                                        <div class="flex items-center justify-center">
-                                            <div class="w-10 h-10 overflow-hidden rounded-full">
-                                                <img :src="user.profile_photo" :alt="user.name">
-                                            </div>
+                                        <div class="text-sm text-gray-500 dark:text-gray-400" x-text="pusat.kota.nama_kota">
                                         </div>
                                     </td>
                                     <td class="px-4 py-4 text-sm font-medium text-right whitespace-nowrap">
-                                        <div class="flex justify-center relative">
-                                            <a :href="`/users/${user.id}`">
+                                        <div class="flex justify-center relative gap-3">
+                                            <a :href="`/pusats/${pusat.id}`"
+                                                class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-500">
                                                 <x-ui.button variant="primary">
-                                                    Detail
+                                                    Lihat Detail
                                                 </x-ui.button>
                                             </a>
                                         </div>
@@ -227,5 +233,4 @@
             </div>
         </div>
     </div>
-
 @endsection

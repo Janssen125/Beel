@@ -11,7 +11,7 @@ class KotaRepository {
     }
 
     public function getKotaById($id) {
-        return Kota::with('provinsi')->find($id);
+        return Kota::with('provinsi')->findOrFail($id);
     }
 
     public function createKota($data) {
@@ -19,12 +19,12 @@ class KotaRepository {
     }
 
     public function updateKota($id, $data) {
-        $kota = Kota::find($id);
+        $kota = Kota::findOrFail($id);
         return $kota->update($data);
     }
 
     public function deleteKota($id) {
-        $kota = Kota::find($id);
+        $kota = Kota::findOrFail($id);
         return $kota->delete();
     }
 }

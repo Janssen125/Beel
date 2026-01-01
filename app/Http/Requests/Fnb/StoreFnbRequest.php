@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Fnb;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -11,7 +11,7 @@ class StoreFnbRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,10 @@ class StoreFnbRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'nama_fnb' => 'required|string|max:255',
+            'harga' => 'required|numeric|min:0',
+            'deskripsi' => 'nullable|string',
+            'foto_fnb' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ];
     }
 }

@@ -98,7 +98,7 @@
                                 class="h-[42px] w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-[42px] pr-4 text-sm text-gray-100" />
                         </div>
                     </form>
-                    @can('create', $fnbs)
+                    @can('create', \App\Models\Fnb::class)
                         <a href="{{ route('fnbs.create') }}">
                             <button class="create-button">
                                 Tambah Makanan & Minuman
@@ -164,22 +164,21 @@
                                         </div>
                                     </td>
                                     <td class="px-4 py-4 text-sm font-medium text-right whitespace-nowrap">
-                                        @can('update', \App\Models\Fnb::class)
-                                            <div class="flex justify-center relative">
+                                        <div class="flex justify-center relative gap-3">
+                                            @can('update', \App\Models\Fnb::class)
                                                 <a :href="`/fnbs/${fnb.id}/edit`">
-                                                    <x-ui.button variant="outline">
+                                                    <x-ui.button variant="outline" class="edit-button">
                                                         Edit
                                                     </x-ui.button>
                                                 </a>
-                                            </div>
-                                        @endcan
-                                        @can('delete', \App\Models\Fnb::class)
-                                            <button class="delete-button"
-                                                @click="$dispatch('open-delete-modal', { id: fnb.id })">
-                                                Hapus
-                                            </button>
-                                        @endcan
-
+                                            @endcan
+                                            @can('delete', \App\Models\Fnb::class)
+                                                <button class="delete-button"
+                                                    @click="$dispatch('open-delete-modal', { id: fnb.id })">
+                                                    Hapus
+                                                </button>
+                                            @endcan
+                                        </div>
                                     </td>
                                 </tr>
                             </template>

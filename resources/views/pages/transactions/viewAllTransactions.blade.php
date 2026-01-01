@@ -199,7 +199,7 @@
                                     <td class="px-4 py-4 text-sm font-medium text-right whitespace-nowrap">
                                         <div class="flex justify-center relative">
                                             <a :href="`/transactions/${transaction.id}`">
-                                                <x-ui.button variant="outline">
+                                                <x-ui.button variant="primary">
                                                     Detail
                                                 </x-ui.button>
                                             </a>

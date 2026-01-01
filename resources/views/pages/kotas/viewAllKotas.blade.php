@@ -177,7 +177,7 @@
                                     </td>
                                     <td class="px-4 py-4 text-sm font-medium text-right whitespace-nowrap">
                                         <div class="flex justify-center relative">
-                                            <x-ui.button variant="outline" @click="openEditModal(kota)">
+                                            <x-ui.button class="edit-button" variant="outline" @click="openEditModal(kota)">
                                                 Ubah
                                             </x-ui.button>
                                         </div>

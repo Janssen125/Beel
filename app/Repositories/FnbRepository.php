@@ -11,7 +11,7 @@ class FnbRepository
     }
 
     public function getFnbById($id) {
-        return FnB::find($id);
+        return FnB::findOrFail($id);
     }
 
     public function createFnb($data) {
@@ -19,12 +19,12 @@ class FnbRepository
     }
 
     public function updateFnb($id, $data) {
-        $fnb = FnB::find($id);
+        $fnb = FnB::findOrFail($id);
         return $fnb->update($data);
     }
 
     public function deleteFnb($id) {
-        $fnb = FnB::find($id);
+        $fnb = FnB::findOrFail($id);
         return $fnb->delete();
     }
 }
