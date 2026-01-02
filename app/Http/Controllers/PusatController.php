@@ -96,4 +96,19 @@ class PusatController extends Controller
         }
         return redirect()->back()->with('error', 'Pusat gagal dihapus.');
     }
+
+    public function syncFnbs(Request $request, Pusat $pusat)
+{
+    $data = collect($request->input('fnbs', []))
+        ->filter(fn ($item) => isset($item['selected']))
+        ->mapWithKeys(fn ($item, $fnbId) => [
+            $fnbId => ['harga' => $item['harga']]
+        ])
+        ->toArray();
+
+    $pusat->fnbs()->sync($data);
+
+    return back()->with('success', 'FnB updated');
+}
+
 }

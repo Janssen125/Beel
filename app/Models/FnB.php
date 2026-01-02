@@ -10,7 +10,6 @@ class FnB extends Model
 
     protected $fillable = [
         'nama_fnb',
-        'harga',
         'deskripsi',
         'foto_fnb',
     ];

@@ -30,9 +30,13 @@ class TransactionDetailSeeder extends Seeder
                 ->inRandomOrder()
                 ->value('nama_fnb');
 
-            $hargaFnb = DB::table('fnb')
-                ->whereIn('id', $fnbIds)
-                ->inRandomOrder()
+            $hargaFnb = DB::table('fnb_pusats')
+                ->where('pusat_id', $pusatId)
+                ->whereIn('fnb_id', function($query) use ($namaFnb) {
+                    $query->select('id')
+                        ->from('fnb')
+                        ->where('nama_fnb', $namaFnb);
+                })
                 ->value('harga');
 
             $quantity = rand(1, 5);

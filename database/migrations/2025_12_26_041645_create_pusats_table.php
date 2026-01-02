@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('alamat');
             $table->unsignedBigInteger('pemilik_id');
             $table->foreign('pemilik_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreignId('kota_id')->constrained('kotas')->onDelete('set null')->nullable();
+            $table->unsignedBigInteger('kota_id')->constrained('kotas')->onDelete('set null')->nullable();
             $table->timestamps();
         });
     }

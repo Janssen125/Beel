@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Detail Pusat')
 @section('content')
-    <x-common.page-breadcrumb pageTitle="Detail Pusat" :breadcrumbs="[['label' => 'Daftar Pusat', 'url' => route('pusat.index')]]" />
+    <x-common.page-breadcrumb pageTitle="Detail Pusat" :breadcrumbs="[['label' => 'Daftar Pusat', 'url' => route('pusats.index')]]" />
     <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:p-6">
         <h3 class="mb-5 text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-7">Detail Pusat, ID =
             {{ $pusat->id }}</h3>
@@ -41,8 +41,7 @@
                     </div>
                 </div>
                 @can('update', $pusat)
-                    <a href="{{ route('pusat.edit', $pusat->id) }}"
-                        class="inline-flex items-center gap-2 rounded-lg bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700">
+                    <a href="{{ route('pusats.edit', $pusat->id) }}">
                         <button class="edit-button">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 20 20"
                                 fill="currentColor">
@@ -51,7 +50,7 @@
                                     d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
                                     clip-rule="evenodd" />
                             </svg>
-                            Ubah Pusat
+                            Edit
                         </button>
                     </a>
                 @endcan
@@ -65,20 +64,25 @@
                     </button>
                 @endcan
             </div>
-            @if ($pusat->details->isNotEmpty())
+            @if ($pusat->fnbPusats->isNotEmpty())
                 <div x-data="{
-                    details: [
-                        @foreach ($pusat->details as $detail)
+                    fnbs: [
+                        @foreach ($pusat->fnbPusats as $fnb)
                         {
-                            'id': 1,
-                            'nama_fnb': '{{ $detail->nama_fnb }}',
-                            'harga': '{{ $detail->harga }}',
-                            'quantity': '{{ $detail->quantity }}',
-                            'subtotal': '{{ $detail->harga * $detail->quantity }}',
+                            'id': '{{ $fnb->fnb->id }}',
+                            'nama_fnb': '{{ $fnb->fnb->nama_fnb }}',
+                            'harga': '{{ $fnb->harga }}',
+                            'deskripsi': '{{ $fnb->fnb->deskripsi }}',
+                            'foto_fnb': '{{ $fnb->fnb->foto_fnb }}',
                         }, @endforeach
                     ],
                 }">
             @endif
+            <a href="{{ route('') }}">
+                <x-ui.button class="mt-10">
+                    Daftar Makanan / Minuman di Pusat Ini
+                </x-ui.button>
+            </a>
             <div
                 class="mt-5 overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
                 <div class="max-w-full overflow-x-auto custom-scrollbar">
@@ -87,7 +91,7 @@
                             <tr class="border-b border-gray-100 dark:border-gray-800">
                                 <th class="px-5 py-3 text-left sm:px-6">
                                     <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
-                                        Nama F&B
+                                        Nama Makanan / Minuman
                                     </p>
                                 </th>
                                 <th class="px-5 py-3 text-left sm:px-6">
@@ -97,42 +101,51 @@
                                 </th>
                                 <th class="px-5 py-3 text-left sm:px-6">
                                     <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
-                                        Quantity
+                                        Deskripsi
                                     </p>
                                 </th>
                                 <th class="px-5 py-3 text-left sm:px-6">
                                     <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
-                                        Subtotal
+                                        Foto Fnb
                                     </p>
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
-                            @if ($pusat->details->isEmpty())
+                            @if ($pusat->fnbPusats->isEmpty())
                                 <tr class="border-b border-gray-100 dark:border-gray-800">
                                     <td colspan="4" class="px-5 py-4 sm:px-6">
                                         <p class="text-gray-500 text-theme-sm dark:text-gray-400 text-center">Tidak
-                                            Pesan Makan</p>
+                                            Ada Makanan / Minuman</p>
                                     </td>
                                 </tr>
                             @else
-                                <template x-for="detail in details" :key="detail.id">
+                                <template x-for="fnb in fnbs" :key="fnb.id">
                                     <tr class="border-b border-gray-100 dark:border-gray-800">
                                         <td class="px-5 py-4 sm:px-6">
-                                            <p class="text-gray-500 text-theme-sm dark:text-gray-400"
-                                                x-text="detail.nama_fnb"></p>
+                                            <p class="text-gray-500 text-theme-sm dark:text-gray-400" x-text="fnb.nama_fnb">
+                                            </p>
                                         </td>
                                         <td class="px-5 py-4 sm:px-6">
-                                            <p class="text-gray-500 text-theme-sm dark:text-gray-400" x-text="detail.harga">
+                                            <p class="text-gray-500 text-theme-sm dark:text-gray-400" x-text="fnb.harga">
                                             </p>
                                         </td>
                                         <td class="px-5 py-4 sm:px-6">
                                             <p class="text-gray-500 text-theme-sm dark:text-gray-400"
-                                                x-text="detail.quantity"></p>
+                                                x-text="fnb.deskripsi"></p>
                                         </td>
                                         <td class="px-5 py-4 sm:px-6">
-                                            <p class="text-gray-500 text-theme-sm dark:text-gray-400"
-                                                x-text="detail.subtotal"></p>
+                                            <template x-if="fnb.foto_fnb">
+                                                <img :src="`/storage/${fnb.foto_fnb}`" alt="Foto Fnb"
+                                                    class="h-16 w-16 rounded-lg object-cover" />
+                                            </template>
+                                            <template x-if="!fnb.foto_fnb">
+                                                <div
+                                                    class="flex items-center justify-center rounded-lg bg-gray-200 dark:bg-gray-800">
+                                                    <span class="text-gray-500 dark:text-gray-400 p-3 text-nowrap">No
+                                                        Image</span>
+                                                </div>
+                                            </template>
                                         </td>
                                     </tr>
                                 </template>
@@ -143,24 +156,23 @@
             </div>
         </div>
     </div>
-    </div>
     <div x-data="{
         open: false,
         transactionId: null
     }"
         x-on:open-delete-modal.window="
         open = true;
-        transactionId = $event.detail.id;
+        transactionId = $event.fnbs.id;
     " x-show="open"
-        x-transition class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+        x-transition class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 dark:bg-white/30">
         <!-- Modal box -->
         <div @click.outside="open = false" class="w-full max-w-md rounded-xl bg-white p-6 dark:bg-gray-900">
             <h2 class="text-lg font-semibold text-gray-800 dark:text-white">
-                Hapus Transaksi
+                Hapus Pusat
             </h2>
 
             <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                Apakah anda yakin ingin menghapus transaksi ini? Tindakan ini tidak dapat dibatalkan.
+                Apakah anda yakin ingin menghapus pusat ini? Tindakan ini tidak dapat dibatalkan.
             </p>
 
             <div class="mt-6 flex justify-end gap-3">
@@ -169,7 +181,7 @@
                     Cancel
                 </button>
 
-                <form :action="{{ route('transactions.destroy', $pusat->id) }}" method="POST">
+                <form :action="{{ route('pusats.destroy', $pusat->id) }}" method="POST">
                     @csrf
                     @method('DELETE')
 

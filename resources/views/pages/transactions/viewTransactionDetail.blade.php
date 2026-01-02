@@ -136,7 +136,7 @@
                         details: [
                             @foreach ($transaction->details as $detail)
                         {
-                            'id': 1,
+                            'id': '{{ $detail->id }}',
                             'nama_fnb': '{{ $detail->nama_fnb }}',
                             'harga': '{{ $detail->harga }}',
                             'quantity': '{{ $detail->quantity }}',
@@ -219,7 +219,7 @@
         open = true;
         transactionId = $event.detail.id;
     " x-show="open"
-        x-transition class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+        x-transition class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 dark:bg-white/30">
         <!-- Modal box -->
         <div @click.outside="open = false" class="w-full max-w-md rounded-xl bg-white p-6 dark:bg-gray-900">
             <h2 class="text-lg font-semibold text-gray-800 dark:text-white">

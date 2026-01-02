@@ -23,7 +23,6 @@ class StoreFnbRequest extends FormRequest
     {
         return [
             'nama_fnb' => 'required|string|max:255',
-            'harga' => 'required|numeric|min:0',
             'deskripsi' => 'nullable|string',
             'foto_fnb' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ];

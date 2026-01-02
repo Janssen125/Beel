@@ -11,6 +11,7 @@ class FnB_Pusat extends Model
     protected $fillable = [
         'fnb_id',
         'pusat_id',
+        'harga',
     ];
 
     public function fnb()

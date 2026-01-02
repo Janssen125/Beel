@@ -8,7 +8,6 @@
         {
             'id': {{ $fnb->id }},
             'nama_fnb': '{{ $fnb->nama_fnb ?? '-' }}',
-            'harga': '{{ $fnb->harga ?? '-' }}',
             'deskripsi': '{{ $fnb->deskripsi ?? '-' }}',
             'foto_fnb': '{{ $fnb->foto_fnb ?? '../images/user/user-02.jpg' }}'
         }@if (!$loop->last),@endif @endforeach
@@ -28,7 +27,6 @@
     
             return this.fnbs.filter(fnb =>
                 fnb.nama_fnb.toLowerCase().includes(q) ||
-                fnb.harga.toLowerCase().includes(q) ||
                 fnb.deskripsi.toLowerCase().includes(q)
             );
         },
@@ -122,9 +120,6 @@
                                     Nama Makanan / Minuman</th>
                                 <th scope="col"
                                     class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                                    Harga</th>
-                                <th scope="col"
-                                    class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">
                                     Deskripsi</th>
                                 <th scope="col"
                                     class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">
@@ -146,10 +141,6 @@
                                     </td>
                                     <td class="px-4 py-4 whitespace-nowrap">
                                         <div class="text-sm text-gray-500 dark:text-gray-400" x-text="fnb.nama_fnb">
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-500 dark:text-gray-400" x-text="fnb.harga">
                                         </div>
                                     </td>
                                     <td class="px-4 py-4 whitespace-nowrap">

@@ -18,19 +18,16 @@ class PusatSeeder extends Seeder
             'alamat' => 'Jl. Pahlawan No. 45, Surabaya',
             'pemilik_id' => 2,
             'kota_id' => 1,
-            'provinsi_id' => 1,
         ],[
             'nama_pusat' => 'Millie',
             'alamat' => 'Jl. Bunga No. 78, Bandung',
             'pemilik_id' => 3,
             'kota_id' => 2,
-            'provinsi_id' => 2,
         ],[
             'nama_pusat' => 'Red Ball',
             'alamat' => 'Jl. Merdeka No. 123, Jakarta',
             'pemilik_id' => 4,
             'kota_id' => 3,
-            'provinsi_id' => 3,
         ]]);
     }
 }

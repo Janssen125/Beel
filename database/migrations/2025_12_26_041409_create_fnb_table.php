@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('fnb', function (Blueprint $table) {
             $table->id();
             $table->string('nama_fnb');
-            $table->bigInteger('harga');
             $table->text('deskripsi')->nullable();
             $table->string('foto_fnb')->nullable();
             $table->timestamps();

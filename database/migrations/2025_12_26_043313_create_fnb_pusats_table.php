@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('fnb_id')->constrained('fnb')->onDelete('cascade');
             $table->foreignId('pusat_id')->constrained('pusats')->onDelete('cascade');
+            $table->bigInteger('harga')->default(0);
             $table->timestamps();
         });
     }
