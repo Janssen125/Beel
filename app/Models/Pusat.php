@@ -36,9 +36,11 @@ class Pusat extends Model
         return $this->belongsTo(User::class, 'pemilik_id');
     }
 
-    public function fnbPusats()
+    public function fnbs()
     {
-        return $this->hasMany(FnB_Pusat::class, 'pusat_id');
+        return $this->belongsToMany(FnB::class, 'fnb_pusats', 'pusat_id', 'fnb_id')
+            ->withPivot('harga')
+            ->withTimestamps();
     }
 
     public function userPusats()

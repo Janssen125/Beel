@@ -52,8 +52,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::patch('/transaction/{id}/updateStatus', [App\Http\Controllers\TransactionController::class, 'updateStatus'])->name('transactions.updateStatus');
 
-    Route::get('/pusat/addFnb', [App\Http\Controllers\PusatController::class, 'addFnb'])->name('pusats.addFnb');
-    Route::post('/pusat/storeFnb', [App\Http\Controllers\PusatController::class, 'storeFnb'])->name('pusats.storeFnb');
+    Route::get('/pusat/addFnb/{id}', [App\Http\Controllers\PusatController::class, 'addFnb'])->name('pusats.addFnb');
+    Route::put('/pusat/{id}/fnbs', [App\Http\Controllers\PusatController::class, 'syncFnbs'])->name('pusats.fnbs.sync');
 
     Route::resource('pusats', App\Http\Controllers\PusatController::class);
     Route::resource('users', App\Http\Controllers\UserController::class);

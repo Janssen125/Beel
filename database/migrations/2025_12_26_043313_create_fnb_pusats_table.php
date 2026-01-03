@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('fnb_pusats', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('fnb_id')->constrained('fnb')->onDelete('cascade');
+            $table->foreignId('fnb_id')->constrained('fnbs')->onDelete('cascade');
             $table->foreignId('pusat_id')->constrained('pusats')->onDelete('cascade');
             $table->bigInteger('harga')->default(0);
             $table->timestamps();

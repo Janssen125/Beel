@@ -25,7 +25,7 @@ class TransactionDetailSeeder extends Seeder
                 ->pluck('fnb_id')
                 ->toArray();
 
-            $namaFnb = DB::table('fnb')
+            $namaFnb = DB::table('fnbs')
                 ->whereIn('id', $fnbIds)
                 ->inRandomOrder()
                 ->value('nama_fnb');
@@ -34,7 +34,7 @@ class TransactionDetailSeeder extends Seeder
                 ->where('pusat_id', $pusatId)
                 ->whereIn('fnb_id', function($query) use ($namaFnb) {
                     $query->select('id')
-                        ->from('fnb')
+                        ->from('fnbs')
                         ->where('nama_fnb', $namaFnb);
                 })
                 ->value('harga');

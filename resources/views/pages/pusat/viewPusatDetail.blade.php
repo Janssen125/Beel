@@ -64,23 +64,23 @@
                     </button>
                 @endcan
             </div>
-            @if ($pusat->fnbPusats->isNotEmpty())
+            @if ($pusat->fnbs->isNotEmpty())
                 <div x-data="{
                     fnbs: [
-                        @foreach ($pusat->fnbPusats as $fnb)
+                        @foreach ($pusat->fnbs as $fnb)
                         {
-                            'id': '{{ $fnb->fnb->id }}',
-                            'nama_fnb': '{{ $fnb->fnb->nama_fnb }}',
-                            'harga': '{{ $fnb->harga }}',
-                            'deskripsi': '{{ $fnb->fnb->deskripsi }}',
-                            'foto_fnb': '{{ $fnb->fnb->foto_fnb }}',
+                            'id': '{{ $fnb->id }}',
+                            'nama_fnb': '{{ $fnb->nama_fnb }}',
+                            'harga': '{{ $fnb->pivot->harga }}',
+                            'deskripsi': '{{ $fnb->deskripsi }}',
+                            'foto_fnb': '{{ $fnb->foto_fnb }}',
                         }, @endforeach
                     ],
                 }">
             @endif
-            <a href="{{ route('') }}">
+            <a href="{{ route('pusats.addFnb', $pusat->id) }}">
                 <x-ui.button class="mt-10">
-                    Daftar Makanan / Minuman di Pusat Ini
+                    Ubah Daftar Makanan / Minuman
                 </x-ui.button>
             </a>
             <div
@@ -112,7 +112,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if ($pusat->fnbPusats->isEmpty())
+                            @if ($pusat->fnbs->isEmpty())
                                 <tr class="border-b border-gray-100 dark:border-gray-800">
                                     <td colspan="4" class="px-5 py-4 sm:px-6">
                                         <p class="text-gray-500 text-theme-sm dark:text-gray-400 text-center">Tidak

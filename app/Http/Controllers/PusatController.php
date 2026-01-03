@@ -5,16 +5,20 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\StorePusatRequest;
 use App\Http\Requests\UpdatePusatRequest;
+use App\Http\Requests\PusatFnb\UpdatePusatFnbRequest;
 use App\Services\PusatService;
+use App\Services\FnBService;
 
 class PusatController extends Controller
 {
 
     protected PusatService $pusatService;
+    protected FnBService $fnbService;
 
     public function __construct()
     {
         $this->pusatService = new PusatService();
+        $this->fnbService = new FnBService();
     }
 
     /**
@@ -97,18 +101,23 @@ class PusatController extends Controller
         return redirect()->back()->with('error', 'Pusat gagal dihapus.');
     }
 
-    public function syncFnbs(Request $request, Pusat $pusat)
-{
-    $data = collect($request->input('fnbs', []))
-        ->filter(fn ($item) => isset($item['selected']))
-        ->mapWithKeys(fn ($item, $fnbId) => [
-            $fnbId => ['harga' => $item['harga']]
-        ])
-        ->toArray();
+    public function addFnb(string $id) {
+        $pusat = $this->pusatService->getPusatById($id);
+        $this->authorize('update', $pusat);
+        $fnbs = $this->fnbService->getAllFnbs();
+        $selectedFnbs = $this->pusatService->getSelectedFnbs($pusat);
+        return view('pages.pusat.fnb.updateFnb', compact(['pusat', 'fnbs', 'selectedFnbs']));
+    }
 
-    $pusat->fnbs()->sync($data);
-
-    return back()->with('success', 'FnB updated');
-}
+    public function syncFnbs(UpdatePusatFnbRequest $request, string $id)
+    {
+        $pusat = $this->pusatService->getPusatById($id);
+        $this->authorize('update', $pusat);
+        $result = $this->pusatService->syncFnbs($pusat, $request->validated());
+        if($result){
+            return redirect()->route('pusats.show', $pusat->id)->with('success', 'FnB berhasil di ubah.');
+        }
+        return redirect()->back()->with('error', 'FnB gagal diubah.');
+    }
 
 }

@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class FnB extends Model
 {
-    protected $table = 'fnb';
+
+    protected $table = 'fnbs';
 
     protected $fillable = [
         'nama_fnb',
@@ -14,9 +15,11 @@ class FnB extends Model
         'foto_fnb',
     ];
 
-    public function fnbPusats()
+    public function pusats()
     {
-        return $this->hasMany(FnB_Pusat::class, 'fnb_id');
+        return $this->belongsToMany(Pusat::class, 'fnb_pusats')
+            ->withPivot('harga')
+            ->withTimestamps();
     }
 
 }

@@ -43,7 +43,12 @@ class PusatPolicy
      */
     public function update(User $user, Pusat $pusat): bool
     {
-        return $user->role === 'superadmin';
+        if($user->role === 'superadmin'){
+            return true;
+        } else if($user->role == 'admin'){
+            $user_pusat_id = $user->userPusats->pusat_id;
+            return $user_pusat_id === $pusat->id;
+        }
     }
 
     /**

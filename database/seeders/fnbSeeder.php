@@ -6,14 +6,14 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class fnbSeeder extends Seeder
+class FnbSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        DB::table('fnb')->insert([
+        DB::table('fnbs')->insert([
             [
                 'nama_fnb' => 'Nasi Goreng Spesial',
                 'deskripsi' => 'Nasi goreng dengan bumbu rahasia dan tambahan telur mata sapi.',
