@@ -7,7 +7,8 @@ use App\Models\TransactionHeader;
 use Illuminate\Support\Facades\Auth;
 use App\Services\TransactionService;
 use App\Http\Requests\Transaction\StoreTransactionRequest;
-use App\Http\Requests\Transaction\UpdateTransactionRequest;
+use App\Http\Requests\Transaction\UpdateStatusRequest;
+use App\Http\Requests\Transaction\UpdateCloseTableRequest;
 
 class TransactionController extends Controller
 {
@@ -82,7 +83,7 @@ class TransactionController extends Controller
         abort(404);
     }
 
-    public function updateStatus(UpdateTransactionRequest $request, string $id)
+    public function updateStatus(UpdateStatusRequest $request, string $id)
     {
         $transaction = $this->transactionService->getTransactionById($id);
         $this->authorize('update', $transaction);
@@ -103,7 +104,17 @@ class TransactionController extends Controller
         ]);
     }
 
+    public function closeTable(UpdateCloseTableRequest $request, string $id)
+    {
+        $transaction = $this->transactionService->getTransactionById($id);
+        $this->authorize('update', $transaction);
 
+        $result = $this->transactionService->updateTransaction($id, $request->validated());
+        if ($result) {
+            return redirect()->route('transactions.show', $id)->with('success', 'Meja transaksi berhasil ditutup.');
+        }
+        return redirect()->route('transactions.show', $id)->with('error', 'Gagal menutup meja transaksi.');
+    }
     /**
      * Remove the specified resource from storage.
      */

@@ -15,7 +15,7 @@
             },
             'kota': {
                 'kota_id': '{{ $p->kota->id ?? '-' }}',
-                'nama_kota': '{{ $p->kota->nama_kota ?? '-' }}'
+                'nama_kota': '{{ $p->kota->nama_kota ?? '-' }}, {{ $p->kota->provinsi->nama_provinsi ?? '-' }}'
             },
         }@if (!$loop->last),@endif @endforeach
         ],

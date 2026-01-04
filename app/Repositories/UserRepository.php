@@ -19,6 +19,10 @@ class UserRepository {
         })->orderBy('created_at', 'desc')->get();
     }
 
+    public function getAllPemiliks() {
+        return User::whereIn('role', ['admin', 'superadmin'])->orderBy('created_at', 'desc')->get();
+    }
+
     public function createUser($data) {
         return User::create($data);
     }

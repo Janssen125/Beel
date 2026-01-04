@@ -16,9 +16,6 @@ class TransactionHeaderSeeder extends Seeder
     {
         $statuses = ['pending', 'completed', 'cancelled'];
         for($i = 1; $i <= 20; $i++) {
-            $jam = rand(1, 5);
-            $menit = rand(0, 59);
-            $detik = rand(0, 59);
             $status = $statuses[array_rand($statuses)];
             $pusatId = rand(1, 3);
 
@@ -38,15 +35,22 @@ class TransactionHeaderSeeder extends Seeder
                 ]);
             }
             else {
+                $waktu_tutup = null;
+                if($status == 'completed') {
+                    $waktu_tutup = now()->subMinutes(rand(30, 180));
+                }
+                $total_waktu_detik = rand(3600, 10800);
+                $total_harga = $hargaPerJam * round($total_waktu_detik / 3600);
                 DB::table('transaction_headers')->insert([
                     'staff_id' => rand(5, 13),
                     'nama_customer' => 'Customer ' . $i,
                     'pusat_id' => $pusatId,
                     'status' => $status,
                     'nomor_meja' => $nomorMeja,
-                    'total_waktu' => $jam . ' jam ' . $menit . ' menit ' . $detik . ' detik',
+                    'total_waktu_detik' => $total_waktu_detik,
                     'harga_per_jam' => $hargaPerJam,
-                    'total_harga' => $jam * $hargaPerJam
+                    'waktu_tutup' => $waktu_tutup,
+                    'total_harga' => $total_harga,
                 ]);
             }
         }

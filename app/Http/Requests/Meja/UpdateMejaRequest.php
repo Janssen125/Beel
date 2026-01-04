@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Pusat;
+namespace App\Http\Requests\Meja;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdatePusatRequest extends FormRequest
+class UpdateMejaRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,10 +22,11 @@ class UpdatePusatRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nama_pusat' => 'required|string|max:255',
-            'alamat' => 'required|string|max:500',
-            'pemilik_id' => 'required|exists:users,id',
-            'kota_id' => 'nullable|exists:kotas,id',
+            'pusat_id' => 'required|exists:pusats,id',
+            'jenis_meja_id' => 'required|exists:jenis_mejas,id',
+            'nomor_meja' => 'required|string|max:10',
+            'harga_per_jam' => 'required|numeric|min:0',
+            'status' => 'required|string|in:kosong,diambil,rusak,tidak_tersedia',
         ];
     }
 }

@@ -14,8 +14,9 @@ class TransactionHeader extends Model
         'pusat_id',
         'status',
         'nomor_meja',
-        'total_waktu',
+        'total_waktu_detik',
         'harga_per_jam',
+        'waktu_tutup',
         'total_harga',
     ];
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Pusat;
+namespace App\Http\Requests\Transaction;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdatePusatRequest extends FormRequest
+class UpdateStatusRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,10 +22,7 @@ class UpdatePusatRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nama_pusat' => 'required|string|max:255',
-            'alamat' => 'required|string|max:500',
-            'pemilik_id' => 'required|exists:users,id',
-            'kota_id' => 'nullable|exists:kotas,id',
+            'status' => 'required|string|in:pending,completed,cancelled',
         ];
     }
 }

@@ -3,22 +3,25 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\StorePusatRequest;
-use App\Http\Requests\UpdatePusatRequest;
+use App\Http\Requests\Pusat\StorePusatRequest;
+use App\Http\Requests\Pusat\UpdatePusatRequest;
 use App\Http\Requests\PusatFnb\UpdatePusatFnbRequest;
 use App\Services\PusatService;
 use App\Services\FnBService;
+use App\Services\KotaService;
 
 class PusatController extends Controller
 {
 
     protected PusatService $pusatService;
     protected FnBService $fnbService;
+    protected KotaService $kotaService;
 
     public function __construct()
     {
         $this->pusatService = new PusatService();
         $this->fnbService = new FnBService();
+        $this->kotaService = new KotaService();
     }
 
     /**
@@ -37,7 +40,9 @@ class PusatController extends Controller
     public function create()
     {
         $this->authorize('create', Pusat::class);
-        return view('pages.pusat.createPusat');
+        $pemiliks = $this->pusatService->getAllPemiliks();
+        $kotas = $this->kotaService->getAllKotas();
+        return view('pages.pusat.createPusat', compact(['pemiliks', 'kotas']));
     }
 
     /**
@@ -70,7 +75,9 @@ class PusatController extends Controller
     {
         $pusat = $this->pusatService->getPusatById($id);
         $this->authorize('update', $pusat);
-        return view('pages.pusat.editPusat', compact('pusat'));
+        $pemiliks = $this->pusatService->getAllPemiliks();
+        $kotas = $this->kotaService->getAllKotas();
+        return view('pages.pusat.editPusat', compact('pusat', 'pemiliks', 'kotas'));
     }
 
     /**

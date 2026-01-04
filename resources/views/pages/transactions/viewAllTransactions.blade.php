@@ -5,6 +5,17 @@
     <div x-data="{
         transactions: [
             @foreach ($transactions as $t)
+    <?php
+    if ($t->total_waktu_detik === null) {
+        $total_waktu = '-';
+    } else {
+        $jam = intdiv($t->total_waktu_detik, 3600);
+        $menit = intdiv($t->total_waktu_detik % 3600, 60);
+        $detik = $t->total_waktu_detik % 60;
+        $total_waktu = sprintf('%02d Jam %02d Menit %02d Detik', $jam, $menit, $detik);
+    }
+    $total_harga = 'Rp ' . number_format($t->total_harga ?? 0, 0, ',', '.');
+    ?>
             {
                 id: {{ $t->id }},
                 staff_name: '{{ $t->staff->name ?? '-' }}',
@@ -12,8 +23,8 @@
                 nama_pusat: '{{ $t->pusat->nama_pusat ?? '-' }}',
                 status: '{{ $t->status ?? '-' }}',
                 nomor_meja: '{{ $t->nomor_meja ?? '-' }}',
-                total_waktu: '{{ $t->total_waktu ?? '-' }}',
-                total_harga: '{{ $t->total_harga ?? '-' }}'
+                total_waktu: '{{ $total_waktu ?? '-' }}',
+                total_harga: '{{ $total_harga ?? '-' }}'
             }@if (!$loop->last),@endif @endforeach
         ],
     

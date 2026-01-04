@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Transaction;
+namespace App\Http\Requests\Meja;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateTransactionRequest extends FormRequest
+class StoreMejaRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,11 @@ class UpdateTransactionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'status' => 'required|string|in:pending,completed,cancelled',
+            'pusat_id' => 'required|exists:pusats,id',
+            'jenis_meja_id' => 'required|exists:jenis_mejas,id',
+            'nomor_meja' => 'required|string|max:10',
+            'harga_per_jam' => 'required|numeric|min:0',
+            'status' => 'required|string|in:kosong,diambil,rusak,tidak_tersedia',
         ];
     }
 }

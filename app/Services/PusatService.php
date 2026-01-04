@@ -4,15 +4,18 @@ namespace App\Services;
 
 use App\Repositories\PusatRepository;
 use App\Repositories\PusatFnbRepository;
+use App\Repositories\UserRepository;
 
 class PusatService {
 
     protected PusatRepository $pusatRepository;
     protected PusatFnbRepository $pusatFnbRepository;
+    protected UserRepository $userRepository;
 
     public function __construct() {
         $this->pusatRepository = new PusatRepository();
         $this->pusatFnbRepository = new PusatFnbRepository();
+        $this->userRepository = new UserRepository();
     }
 
     public function getAllPusat() {
@@ -33,6 +36,10 @@ class PusatService {
 
     public function deletePusat($id) {
         return $this->pusatRepository->deletePusat($id);
+    }
+
+    public function getAllPemiliks() {
+        return $this->userRepository->getAllPemiliks();
     }
 
     public function getSelectedFnbs($pusat) {

@@ -55,6 +55,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/pusat/addFnb/{id}', [App\Http\Controllers\PusatController::class, 'addFnb'])->name('pusats.addFnb');
     Route::put('/pusat/{id}/fnbs', [App\Http\Controllers\PusatController::class, 'syncFnbs'])->name('pusats.fnbs.sync');
 
+    Route::get('/pusat/{pusat_id}/mejas', [App\Http\Controllers\MejaController::class, 'viewAll'])->name('mejas.viewAll');
+
     Route::resource('pusats', App\Http\Controllers\PusatController::class);
     Route::resource('users', App\Http\Controllers\UserController::class);
     Route::resource('fnbs', App\Http\Controllers\FnBController::class);

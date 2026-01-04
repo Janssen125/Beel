@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Pusat;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -11,7 +11,7 @@ class StorePusatRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,10 @@ class StorePusatRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'nama_pusat' => 'required|string|max:255',
+            'alamat' => 'required|string|max:500',
+            'pemilik_id' => 'required|exists:users,id',
+            'kota_id' => 'nullable|exists:kotas,id',
         ];
     }
 }

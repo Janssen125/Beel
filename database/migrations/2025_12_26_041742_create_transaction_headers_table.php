@@ -19,8 +19,9 @@ return new class extends Migration
             $table->enum('status', ['pending', 'completed', 'cancelled'])->default('pending');
             // Menyimpan nomor meja jika ada (bisa aja cuma beli minum), ga dibuat relasi karena bisa saja mejanya mau dihapus
             $table->string('nomor_meja')->nullable();
-            $table->string('total_waktu')->nullable(); // format 'HH jam MM menit SS detik'
+            $table->bigInteger('total_waktu_detik')->nullable(); // format 'HH jam MM menit SS detik'
             $table->bigInteger('harga_per_jam')->nullable();
+            $table->timestamp('waktu_tutup')->nullable();
             $table->bigInteger('total_harga')->default(0);
             $table->foreign('staff_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();

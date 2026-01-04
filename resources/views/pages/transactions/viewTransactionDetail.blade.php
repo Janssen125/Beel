@@ -1,6 +1,14 @@
 @extends('layouts.app')
 @section('title', 'Detail Transaksi')
 @section('content')
+
+    <?php
+    $jam = intdiv($t->total_waktu_detik ?? 0, 3600);
+    $menit = intdiv(($t->total_waktu_detik ?? 0) % 3600, 60);
+    $detik = ($t->total_waktu_detik ?? 0) % 60;
+    $total_waktu = sprintf('%02d Jam %02d Menit %02d Detik', $jam, $menit, $detik);
+    
+    ?>
     <x-common.page-breadcrumb pageTitle="Detail Transaksi" :breadcrumbs="[['label' => 'Daftar Transaksi', 'url' => route('transactions.index')]]" />
     <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:p-6">
         <h3 class="mb-5 text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-7">Detail Transaksi, ID =
@@ -106,7 +114,7 @@
                             <div>
                                 <p class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">Total Waktu</p>
                                 <p class="text-sm font-medium text-gray-800 dark:text-white/90">
-                                    {{ $transaction->total_waktu ?? '-' }}</p>
+                                    {{ $total_waktu ?? '-' }}</p>
                             </div>
 
                             <div>

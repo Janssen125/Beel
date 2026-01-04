@@ -1,10 +1,13 @@
 @extends('layouts.app')
 @section('title', 'Detail Pusat')
 @section('content')
-    <x-common.page-breadcrumb pageTitle="Detail Pusat" :breadcrumbs="[['label' => 'Daftar Pusat', 'url' => route('pusats.index')]]" />
+    @if (auth()->user()->role == 'admin' && auth()->user()->id == $pusat->pemilik_id)
+        <x-common.page-breadcrumb pageTitle="Pusat Saya" />
+    @else
+        <x-common.page-breadcrumb pageTitle="Detail Pusat" :breadcrumbs="[['label' => 'Daftar Pusat', 'url' => route('pusats.index')]]" />
+    @endif
     <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:p-6">
-        <h3 class="mb-5 text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-7">Detail Pusat, ID =
-            {{ $pusat->id }}</h3>
+        <h3 class="mb-5 text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-7">Detail Pusat</h3>
         <div class="p-5 mb-6 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
             <div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
                 <div>
@@ -35,7 +38,7 @@
                         <div>
                             <p class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">Nama Kota</p>
                             <p class="text-sm font-medium text-gray-800 dark:text-white/90">
-                                {{ $pusat->kota->nama_kota ?? '-' }}</p>
+                                {{ $pusat->kota->nama_kota ?? '-' }}, {{ $pusat->kota->provinsi->nama_provinsi ?? '-' }}</p>
                         </div>
 
                     </div>
@@ -81,6 +84,11 @@
             <a href="{{ route('pusats.addFnb', $pusat->id) }}">
                 <x-ui.button class="mt-10">
                     Ubah Daftar Makanan / Minuman
+                </x-ui.button>
+            </a>
+            <a href="">
+                <x-ui.button class="mt-10 ml-3" variant="primary">
+                    Lihat Meja
                 </x-ui.button>
             </a>
             <div
