@@ -34,4 +34,16 @@ class TransactionHeader extends Model
     {
         return $this->hasMany(TransactionDetail::class, 'transaction_header_id');
     }
+
+    public function meja()
+    {
+        return $this->belongsTo(
+            Meja::class,
+            'nomor_meja',      // FK on transaction_headers
+            'nomor_meja'       // PK-like field on mejas
+        )->whereColumn(
+            'transaction_headers.pusat_id',
+            'mejas.pusat_id'
+        );
+    }
 }

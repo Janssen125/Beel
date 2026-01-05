@@ -36,8 +36,12 @@ class MenuHelper
                 'icon' => 'location',
                 'name' => 'Daftar Kota',
                 'path' => '/kotas/',
-
             ],
+            [
+                'icon' => 'table',
+                'name' => 'Daftar Jenis Meja',
+                'path' => '/jenis_mejas/',
+            ]
         ];
     }
 
@@ -165,6 +169,7 @@ class MenuHelper
             'fnb' => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#666666" d="M1 22c0 .54.45 1 1 1h13c.56 0 1-.46 1-1v-1H1zM8.5 9C4.75 9 1 11 1 15h15c0-4-3.75-6-7.5-6m-4.88 4c1.11-1.55 3.47-2 4.88-2s3.77.45 4.88 2zM1 17h15v2H1zM18 5V1h-2v4h-5l.23 2h9.56l-1.4 14H18v2h1.72c.84 0 1.53-.65 1.63-1.47L23 5z"/></svg>',
             'location' => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none"><path d="M12 2a8 8 0 0 1 8 8c0 6.5-8 12-8 12s-8-5.5-8-12a8 8 0 0 1 8-8m0 5a3 3 0 1 0 0 6a3 3 0 0 0 0-6" clip-rule="evenodd"/><path stroke="#666666" stroke-width="2" d="M20 10c0 6.5-8 12-8 12s-8-5.5-8-12a8 8 0 1 1 16 0Z"/><path stroke="#666666" stroke-width="2" d="M15 10a3 3 0 1 1-6 0a3 3 0 0 1 6 0Z"/></g></svg>',
             'transaction' => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 48 48"><g fill="none" stroke="#666666" stroke-linejoin="round" stroke-width="4"><rect width="30" height="36" x="9" y="8" rx="2"/><path stroke-linecap="round" d="M18 4v6m12-6v6m-14 9h16m-16 8h12m-12 8h8"/></g></svg>',
+            'table' => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="21.230769230769234" viewBox="0 0 1664 1472"><path fill="#666666" d="M289 192h1086q202 185 267 245q22 11 22 34v141q0 22-11.5 50t-27.5 28h-32v678q0 27-8 65.5t-23 38.5h-133q-16 0-35-42t-19-62V690H289v678q0 20-19 62t-35 42H102q-15 0-23-38.5t-8-65.5V690H39q-16 0-27.5-28T0 612V471q0-23 22-34zm1034 866V746h-170v312q0 24 9 51.5t25 27.5h71q17 0 41-30.5t24-48.5m-982 0V746h170v312q0 24-9 51.5t-25 27.5h-71q-17 0-41-30.5t-24-48.5"/></svg>',
         ];
 
         return $icons[$iconName] ?? '<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="currentColor"/></svg>';

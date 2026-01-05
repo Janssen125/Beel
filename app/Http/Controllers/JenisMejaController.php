@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\JenisMejaService;
-use App\Http\Requests\StoreJenisMejaRequest;
-use App\Http\Requests\UpdateJenisMejaRequest;
+use App\Http\Requests\JenisMeja\StoreJenisMejaRequest;
+use App\Http\Requests\JenisMeja\UpdateJenisMejaRequest;
 
 class JenisMejaController extends Controller
 {

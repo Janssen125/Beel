@@ -86,7 +86,7 @@
                     Ubah Daftar Makanan / Minuman
                 </x-ui.button>
             </a>
-            <a href="">
+            <a href="{{ route('mejas.viewAll', $pusat->id) }}">
                 <x-ui.button class="mt-10 ml-3" variant="primary">
                     Lihat Meja
                 </x-ui.button>

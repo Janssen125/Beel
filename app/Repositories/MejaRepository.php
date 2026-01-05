@@ -11,7 +11,9 @@ class MejaRepository {
     }
 
     public function getMejasByPusat($pusat_id) {
-        return Meja::where('pusat_id', $pusat_id)->with('jenisMeja')->orderBy('nomor_meja', 'asc')->get();
+        return Meja::where('pusat_id', $pusat_id)
+        ->with(['jenisMeja', 'activeTransaction'])
+        ->orderby('nomor_meja', 'asc')->get();
     }
 
     public function createMeja($data) {

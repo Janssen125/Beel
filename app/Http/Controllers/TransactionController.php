@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\TransactionHeader;
 use Illuminate\Support\Facades\Auth;
 use App\Services\TransactionService;
+use App\Services\MejaService;
 use App\Http\Requests\Transaction\StoreTransactionRequest;
 use App\Http\Requests\Transaction\UpdateStatusRequest;
 use App\Http\Requests\Transaction\UpdateCloseTableRequest;
@@ -14,10 +15,12 @@ class TransactionController extends Controller
 {
 
     protected TransactionService $transactionService;
+    protected MejaService $mejaService;
 
     public function __construct()
     {
         $this->transactionService = new TransactionService();
+        $this->mejaService = new MejaService();
     }
 
     /**
@@ -40,6 +43,12 @@ class TransactionController extends Controller
         return view('pages.transactions.createTransaction');
     }
 
+    public function createOrder($id) {
+        $this->authorize('create', TransactionHeader::class);
+        $meja = $this->mejaService->getMejaById($id);
+        return view('pages.pusat.meja.createOrder', compact('meja'));
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -48,9 +57,15 @@ class TransactionController extends Controller
         $this->authorize('create', TransactionHeader::class);
         $result = $this->transactionService->createTransaction($request->validated());
         if($result) {
+            if($request->filled('redirect_to')) {
+                return redirect($request->input('redirect_to'))->with('success', 'Transaksi berhasil dibuat.');
+            }
             return redirect()->route('transactions.index')->with('success', 'Transaksi berhasil dibuat.');
         }
         else {
+            if($request->filled('redirect_to')) {
+                return redirect()->back()->with('error', 'Transaksi gagal dibuat.');
+            }
             return redirect()->back()->with('error', 'Transaksi gagal dibuat.');
         }
     }

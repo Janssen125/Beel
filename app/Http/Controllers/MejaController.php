@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\MejaService;
+use App\Services\PusatService;
 use App\Http\Requests\Meja\StoreMejaRequest;
 use App\Http\Requests\Meja\UpdateMejaRequest;
 
@@ -11,10 +12,12 @@ class MejaController extends Controller
 {
 
     protected MejaService $mejaService;
+    protected PusatService $pusatService;
 
     public function __construct()
     {
         $this->mejaService = new MejaService();
+        $this->pusatService = new PusatService();
     }
 
     /**
@@ -27,8 +30,9 @@ class MejaController extends Controller
 
     public function viewAll($pusat_id) {
         $this->authorize('viewAny', Meja::class);
+        $pusat = $this->pusatService->getPusatById($pusat_id);
         $mejas = $this->mejaService->getMejasByPusat($pusat_id);
-        return view('pages.pusat.meja.viewMejas', compact('mejas'));
+        return view('pages.pusat.meja.viewMejas', compact(['mejas', 'pusat']));
     }
 
     /**
@@ -57,8 +61,8 @@ class MejaController extends Controller
      */
     public function show(string $id)
     {
-        $this->authorize('view', Meja::class);
         $meja = $this->mejaService->getMejaById($id);
+        $this->authorize('view', $meja);
         return view('pages.pusat.meja.viewMejaDetail', compact('meja'));
     }
 

@@ -25,4 +25,13 @@ class Meja extends Model
     {
         return $this->belongsTo(Pusat::class, 'pusat_id');
     }
+
+    public function activeTransaction()
+    {
+        return $this->hasOne(
+            TransactionHeader::class,
+            'nomor_meja',
+            'nomor_meja'
+        )->where('status', 'pending');
+    }
 }
