@@ -20,13 +20,29 @@ class MejaService {
         return $this->mejaRepository->getMejasByPusat($pusat_id);
     }
 
-    public function createMeja($data) {
-        return $this->mejaRepository->createMeja($data);
+    public function getMejaByPusatNomorMeja($pusat_id, $nomor) {
+        return $this->mejaRepository->getMejaByPusatNomorMeja($pusat_id, $nomor);
     }
 
-    public function updateMeja($id, $data) {
-        return $this->mejaRepository->updateMeja($id, $data);
+    public function createMeja($data) {
+        $result = $this->getMejaByPusatNomorMeja($data['pusat_id'], $data['nomor_meja']);
+        if(!$result){
+            return $this->mejaRepository->createMeja($data);
+        }
+        return null;
     }
+
+    public function updateMeja($data, $id)
+    {
+        $existing = $this->mejaRepository->getByPusatNomorMejaExceptId($data['pusat_id'], $data['nomor_meja'], $id);
+
+        if ($existing) {
+            return null;
+        }
+
+        return $this->mejaRepository->updateMeja($data, $id);
+    }
+
 
     public function deleteMeja($id) {
         return $this->mejaRepository->deleteMeja($id);

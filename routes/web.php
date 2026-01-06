@@ -58,6 +58,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/pusat/{pusat_id}/mejas', [App\Http\Controllers\MejaController::class, 'viewAll'])->name('mejas.viewAll');
 
+    Route::get('/pusat/{pusat_id}/mejas/create', [App\Http\Controllers\MejaController::class, 'createMeja'])->name('mejas.createMeja');
+
     Route::resource('pusats', App\Http\Controllers\PusatController::class);
     Route::resource('users', App\Http\Controllers\UserController::class);
     Route::resource('fnbs', App\Http\Controllers\FnBController::class);

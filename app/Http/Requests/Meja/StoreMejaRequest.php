@@ -26,7 +26,6 @@ class StoreMejaRequest extends FormRequest
             'jenis_meja_id' => 'required|exists:jenis_mejas,id',
             'nomor_meja' => 'required|string|max:10',
             'harga_per_jam' => 'required|numeric|min:0',
-            'status' => 'required|string|in:kosong,diambil,rusak,tidak_tersedia',
         ];
     }
 }

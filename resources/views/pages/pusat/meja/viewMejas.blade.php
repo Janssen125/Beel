@@ -14,9 +14,18 @@
     <div
         class="min-h-screen rounded-2xl border border-gray-200 bg-white px-5 py-7 dark:border-gray-800 dark:bg-white/[0.03] xl:px-10 xl:py-12">
         <div class="mx-auto w-full text-center">
-            <h3 class="mb-4 font-semibold text-gray-800 text-theme-xl dark:text-white/90 sm:text-2xl">
-                Daftar Meja
-            </h3>
+            <div class="flex flex-col sm:flex-row justify-between mb-3">
+                <h3 class="mb-4 font-semibold text-gray-800 text-theme-xl dark:text-white/90 sm:text-2xl">
+                    Daftar Meja
+                </h3>
+                @can('create', \App\Models\Meja::class)
+                    <a href="{{ route('mejas.createMeja', $pusat->id) }}">
+                        <button class="create-button">
+                            Tambah Meja
+                        </button>
+                    </a>
+                @endcan
+            </div>
             <div class="flex grow flex-wrap flex-4 gap-10 w-full justify-center">
                 @foreach ($mejas as $meja)
                     <x-meja-card :title="$meja->nomor_meja">
@@ -29,7 +38,7 @@
                             @endif
                         </x-slot:desc>
                         <div class="space-y-4">
-                            <div class="flex justify-center">
+                            <div class="flex justify-center gap-5">
                                 @if ($meja->activeTransaction)
                                     <a href="{{ route('mejas.show', $meja->activeTransaction->id) }}"
                                         class="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800">
@@ -41,6 +50,12 @@
                                         Mulai Transaksi
                                     </a>
                                 @endif
+                                @can('update', $meja)
+                                    <a href="{{ route('mejas.edit', $meja->id) }}"
+                                        class="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800">
+                                        Ubah Meja
+                                    </a>
+                                @endcan
                             </div>
                         </div>
                     </x-meja-card>
