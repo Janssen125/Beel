@@ -25,6 +25,10 @@ class TransactionService {
         }
     }
 
+    public function getTransactionByPusatIdNomorMeja($pusat_id, $nomor_meja) {
+        return $this->transactionHeaderRepository->getTransactionByPusatIdNomorMeja($pusat_id, $nomor_meja);
+    }
+
     public function getTransactionById($id) {
         return $this->transactionHeaderRepository->getTransactionById($id);
     }

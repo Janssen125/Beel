@@ -14,6 +14,12 @@ class TransactionHeaderRepository {
         return TransactionHeader::where('pusat_id', $pusat_id)->orderBy('created_at', 'desc')->get();
     }
 
+    public function getTransactionByPusatIdNomorMeja($pusat_id, $nomor_meja) {
+        return TransactionHeader::where('pusat_id', $pusat_id)
+                                ->where('nomor_meja', $nomor_meja)
+                                ->first();
+    }
+
     public function getTransactionById($id) {
         return TransactionHeader::with(['staff', 'pusat', 'details'])->findOrFail($id);
     }

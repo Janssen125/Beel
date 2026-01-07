@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Services\MejaService;
 use App\Services\PusatService;
 use App\Services\JenisMejaService;
+use App\Services\TransactionService;
 use App\Http\Requests\Meja\StoreMejaRequest;
 use App\Http\Requests\Meja\UpdateMejaRequest;
 
@@ -15,12 +16,15 @@ class MejaController extends Controller
     protected MejaService $mejaService;
     protected PusatService $pusatService;
     protected JenisMejaService $jenisMejaService;
+    protected TransactionService $transactionService;
+
 
     public function __construct()
     {
         $this->mejaService = new MejaService();
         $this->pusatService = new PusatService();
         $this->jenisMejaService = new JenisMejaService();
+        $this->transactionService = new TransactionService();
     }
 
     /**
@@ -79,7 +83,9 @@ class MejaController extends Controller
     {
         $meja = $this->mejaService->getMejaById($id);
         $this->authorize('view', $meja);
-        return view('pages.pusat.meja.viewMejaDetail', compact('meja'));
+        $pusat_id = $meja->pusat_id;
+        $transaction = $this->transactionService->getTransactionByPusatIdNomorMeja($pusat_id, $meja->nomor_meja);
+        return view('pages.pusat.meja.viewMejaDetail', compact('transaction'));
     }
 
     /**
