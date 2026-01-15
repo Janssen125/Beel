@@ -43,6 +43,9 @@ class MejaService {
         return $this->mejaRepository->updateMeja($data, $id);
     }
 
+    public function updateStatus($id, $status) {
+        return $this->mejaRepository->updateStatus($id, $status);
+    }
 
     public function deleteMeja($id) {
         return $this->mejaRepository->deleteMeja($id);

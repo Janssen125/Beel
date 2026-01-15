@@ -57,6 +57,7 @@ class TransactionController extends Controller
         $this->authorize('create', TransactionHeader::class);
         $result = $this->transactionService->createTransaction($request->validated());
         if($result) {
+            $resultUpdateMejaStatus = $this->mejaService->updateStatus($request->input('meja_id'), 'diambil');
             if($request->filled('redirect_to')) {
                 return redirect($request->input('redirect_to'))->with('success', 'Transaksi berhasil dibuat.');
             }

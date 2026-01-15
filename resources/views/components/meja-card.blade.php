@@ -1,7 +1,7 @@
 @props(['title'])
 
 <div
-    {{ $attributes->merge(['class' => 'rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]']) }}>
+    {{ $attributes->merge(['class' => 'w-full sm:w-3/12 rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]']) }}>
 
     <!-- Card Header -->
     <div class="px-6 py-5">

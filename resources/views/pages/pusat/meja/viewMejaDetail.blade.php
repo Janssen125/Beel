@@ -1,13 +1,6 @@
 @extends('layouts.app')
 @section('title', 'Detail Meja')
 @section('content')
-    <?php
-    $jam = intdiv($t->total_waktu_detik ?? 0, 3600);
-    $menit = intdiv(($t->total_waktu_detik ?? 0) % 3600, 60);
-    $detik = ($t->total_waktu_detik ?? 0) % 60;
-    $total_waktu = sprintf('%02d Jam %02d Menit %02d Detik', $jam, $menit, $detik);
-    
-    ?>
     @if (auth()->user()->role == 'staff')
         <x-common.page-breadcrumb pageTitle="Detail Meja" :breadcrumbs="[['label' => 'Daftar Meja', 'url' => route('mejas.viewAll', $transaction->pusat_id)]]" />
     @elseif(auth()->user()->role == 'admin')
@@ -65,12 +58,12 @@
             <div class="p-5 mb-6 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
                 <div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
                     <div>
-
-                        <div class="grid grid-cols-1 gap-4 lg:grid-cols-4 lg:gap-7 2xl:gap-x-32">
+                        <div class="grid grid-cols-1 gap-4 lg:grid-cols-4 lg:gap-7 2xl:gap-x-32" x-data="timer('{{ $transaction->created_at }}', {{ $meja->harga_per_jam }})"
+                            x-init="start()">
                             <div>
                                 <p class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">Nama Staff</p>
                                 <p class="text-sm font-medium text-gray-800 dark:text-white/90">
-                                    {{ $transaction->staff->name ?? '-' }} (id = {{ $transaction->staff_id ?? '-' }})</p>
+                                    {{ $transaction->staff->name ?? '-' }}</p>
                             </div>
 
                             <div>
@@ -84,8 +77,7 @@
                                     Nama Pusat
                                 </p>
                                 <p class="text-sm font-medium text-gray-800 dark:text-white/90">
-                                    {{ $transaction->pusat->nama_pusat ?? '-' }} (id = {{ $transaction->pusat_id ?? '-' }})
-                                </p>
+                                    {{ $transaction->pusat->nama_pusat ?? '-' }} </p>
                                 </p>
                             </div>
 
@@ -124,21 +116,26 @@
                             </div>
 
                             <div>
-                                <p class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">Total Waktu</p>
-                                <p class="text-sm font-medium text-gray-800 dark:text-white/90">
-                                    {{ $total_waktu ?? '-' }}</p>
+                                <div>
+                                    <p class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">Total Waktu</p>
+                                    {{-- <span x-data="timer('{{ $transaction->created_at }}')" x-init="start()" x-text="display"
+                                        class="font-mono"></span> --}}
+                                    <p class="text-sm font-medium text-gray-800 dark:text-white/90" x-text="display">
+                                </div>
+
                             </div>
 
                             <div>
                                 <p class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">Harga Per Jam</p>
                                 <p class="text-sm font-medium text-gray-800 dark:text-white/90">
-                                    {{ $transaction->harga_per_jam ?? '-' }}</p>
+                                    {{ $meja->harga_per_jam ?? '-' }}</p>
                             </div>
 
                             <div>
                                 <p class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">Total Harga</p>
                                 <p class="text-sm font-medium text-gray-800 dark:text-white/90">
-                                    {{ $transaction->total_harga ?? '-' }}</p>
+                                    Rp <span x-text="formattedHarga"></span>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -157,8 +154,13 @@
                         ],
                     }">
                 @endif
+                <a href="{{ route('mejas.addOrder', $meja->pusat_id) }}">
+                    <button class="create-button mt-5">
+                        Add Order
+                    </button>
+                </a>
                 <div
-                    class="mt-5 overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+                    class="mt-5 overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
                     <div class="max-w-full overflow-x-auto custom-scrollbar">
                         <table class="w-full min-w-[1102px]">
                             <thead>
@@ -223,5 +225,49 @@
             </div>
         </div>
     </div>
+    <script>
+        function timer(startTime, hargaPerJam) {
+            return {
+                startTimestamp: null,
+                elapsedSeconds: 0,
+                hargaPerJam: hargaPerJam,
+                display: '00 Jam :00 Menit :00 Detik',
+                interval: null,
+
+                start() {
+                    this.startTimestamp = new Date(startTime).getTime();
+                    this.update();
+                    this.interval = setInterval(() => this.update(), 1000);
+                },
+
+                update() {
+                    this.elapsedSeconds = Math.floor(
+                        (Date.now() - this.startTimestamp) / 1000
+                    );
+
+                    const h = Math.floor(this.elapsedSeconds / 3600);
+                    const m = Math.floor((this.elapsedSeconds % 3600) / 60);
+                    const s = this.elapsedSeconds % 60;
+
+                    this.display =
+                        String(h).padStart(2, '0') + ' Jam : ' +
+                        String(m).padStart(2, '0') + ' Menit : ' +
+                        String(s).padStart(2, '0') + ' Detik';
+                },
+
+                get totalHarga() {
+                    return this.hargaPerJam * Math.floor(this.elapsedSeconds / 3600);
+                },
+
+                get formattedHarga() {
+                    return this.totalHarga.toLocaleString('id-ID', {
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0
+                    });
+                }
+            }
+        }
+    </script>
+
 
 @endsection

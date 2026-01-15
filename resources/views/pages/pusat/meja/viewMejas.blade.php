@@ -26,7 +26,7 @@
                     </a>
                 @endcan
             </div>
-            <div class="flex grow flex-wrap flex-4 gap-10 w-full justify-center">
+            <div class="flex grow flex-wrap flex-4 gap-10 w-full justify-center py-4">
                 @foreach ($mejas as $meja)
                     <x-meja-card :title="$meja->nomor_meja">
                         <x-slot:desc>
@@ -39,24 +39,28 @@
                                 <span class="text-yellow-500">Tidak Tersedia</span>
                             @elseif ($meja->status == 'kosong')
                                 <span class="text-gray-400">Kosong</span>
+                            @else
+                                <span class="">-</span>
                             @endif
                         </x-slot:desc>
                         <div class="space-y-4">
-                            <div class="flex justify-center gap-5">
+                            <div class="flex justify-center gap-5 flex-col sm:flex-row">
                                 @if ($meja->activeTransaction)
-                                    <a href="{{ route('mejas.show', $meja->activeTransaction->id) }}"
-                                        class="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800">
+                                    <a href="{{ route('mejas.show', $meja->id) }}"
+                                        class="flex justify-center items-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800">
                                         Lihat Detail
                                     </a>
                                 @else
-                                    <a href="{{ route('transactions.createOrder', $meja->id) }}"
-                                        class="inline-flex items-center rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-green-300 dark:focus:ring-green-800">
-                                        Mulai Buka Meja
-                                    </a>
+                                    @if ($meja->status == 'kosong')
+                                        <a href="{{ route('transactions.createOrder', $meja->id) }}"
+                                            class="flex justify-center items-center rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-green-300 dark:focus:ring-green-800">
+                                            Mulai Buka Meja
+                                        </a>
+                                    @endif
                                 @endif
                                 @can('update', $meja)
                                     <a href="{{ route('mejas.edit', $meja->id) }}"
-                                        class="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800">
+                                        class="flex justify-center items-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800">
                                         Ubah Meja
                                     </a>
                                 @endcan

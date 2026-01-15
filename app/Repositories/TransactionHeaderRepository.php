@@ -17,6 +17,7 @@ class TransactionHeaderRepository {
     public function getTransactionByPusatIdNomorMeja($pusat_id, $nomor_meja) {
         return TransactionHeader::where('pusat_id', $pusat_id)
                                 ->where('nomor_meja', $nomor_meja)
+                                ->where('status', 'pending')
                                 ->first();
     }
 

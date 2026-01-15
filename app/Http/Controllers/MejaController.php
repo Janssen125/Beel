@@ -85,7 +85,13 @@ class MejaController extends Controller
         $this->authorize('view', $meja);
         $pusat_id = $meja->pusat_id;
         $transaction = $this->transactionService->getTransactionByPusatIdNomorMeja($pusat_id, $meja->nomor_meja);
-        return view('pages.pusat.meja.viewMejaDetail', compact('transaction'));
+        return view('pages.pusat.meja.viewMejaDetail', compact('transaction', 'meja'));
+    }
+
+    public function addOrder(string $id) {
+        $meja = $this->mejaService->getMejaById($id);
+        $this->authorize('view', $meja);
+        return view('pages.pusat.meja.addOrder', compact('meja'));
     }
 
     /**
