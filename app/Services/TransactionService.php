@@ -48,6 +48,10 @@ class TransactionService {
         return $transactionHeader;
     }
 
+    public function createTransactionDetail($data) {
+        return $this->transactionDetailRepository->createTransaction($data);
+    }
+
     public function updateTransaction($id, $data) {
         return $this->transactionHeaderRepository->updateTransaction($id, $data);
     }

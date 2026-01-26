@@ -15,13 +15,13 @@
             ['label' => 'Daftar Meja', 'url' => route('mejas.viewAll', $transaction->pusat_id)],
         ]" />
     @endif
-    <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:p-6">
+    <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/3 lg:p-6">
         <h3 class="mb-5 text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-7">Detail Meja,
             {{ $transaction->nomor_meja }}</h3>
         <div x-data="{
             status: '{{ $transaction->status }}',
             open: false,
-        
+
             statuses: ['pending', 'completed', 'cancelled'],
             getStatusClass(status) {
                 const classes = {
@@ -34,7 +34,7 @@
             async updateStatus(newStatus) {
                 this.status = newStatus;
                 this.open = false;
-        
+
                 const response = await fetch('{{ route('transactions.updateStatus', $transaction->id) }}', {
                     method: 'PATCH',
                     headers: {
@@ -44,14 +44,14 @@
                         status: newStatus
                     })
                 });
-        
+
                 if (!response.ok) {
                     console.error('Failed to update status');
                     return;
                 }
-        
+
                 window.location.reload();
-        
+
             }
         }">
 
@@ -154,7 +154,7 @@
                         ],
                     }">
                 @endif
-                <a href="{{ route('mejas.addOrder', $meja->pusat_id) }}">
+                <a href="{{ route('mejas.addOrder', [$meja->id, $transaction->id]) }}">
                     <button class="create-button mt-5">
                         Add Order
                     </button>
@@ -162,7 +162,7 @@
                 <div
                     class="mt-5 overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
                     <div class="max-w-full overflow-x-auto custom-scrollbar">
-                        <table class="w-full min-w-[1102px]">
+                        <table class="w-full">
                             <thead>
                                 <tr class="border-b border-gray-100 dark:border-gray-800">
                                     <th class="px-5 py-3 text-left sm:px-6">
@@ -183,6 +183,11 @@
                                     <th class="px-5 py-3 text-left sm:px-6">
                                         <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
                                             Subtotal
+                                        </p>
+                                    </th>
+                                    <th class="px-5 py-3 text-left sm:px-6" colspan=2>
+                                        <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                                            Aksi
                                         </p>
                                     </th>
                                 </tr>
@@ -214,6 +219,24 @@
                                             <td class="px-5 py-4 sm:px-6">
                                                 <p class="text-gray-500 text-theme-sm dark:text-gray-400"
                                                     x-text="detail.subtotal"></p>
+                                            </td>
+                                            <td class="px-5 py-4 sm:px-6">
+                                                {{-- <a :href="`{{ url('mejas/{{ $meja->id }}/transactions/' . $transaction->id . '/details/') }}/${detail.id}/edit`"
+                                                    class="text-blue-600 hover:underline dark:text-blue-400 text-theme-sm">
+                                                    Edit
+                                                </a> --}}
+                                            </td>
+                                            <td class="px-5 py-4 sm:px-6">
+                                                {{-- <form
+                                                    :action="`{{ url('mejas/{{ $meja->id }}/transactions/' . $transaction->id . '/details/') }}/${detail.id}`"
+                                                    method="POST" onsubmit="return confirm('Are you sure?');">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit"
+                                                        class="text-red-600 hover:underline dark:text-red-400 text-theme-sm">
+                                                        Delete
+                                                    </button>
+                                                </form> --}}
                                             </td>
                                         </tr>
                                     </template>

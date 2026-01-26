@@ -2,25 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\TransactionHeader;
-use Illuminate\Support\Facades\Auth;
-use App\Services\TransactionService;
-use App\Services\MejaService;
+use App\Http\Requests\Transaction\StoreTransactionDetailRequest;
 use App\Http\Requests\Transaction\StoreTransactionRequest;
-use App\Http\Requests\Transaction\UpdateStatusRequest;
 use App\Http\Requests\Transaction\UpdateCloseTableRequest;
+use App\Http\Requests\Transaction\UpdateStatusRequest;
+use App\Models\TransactionHeader;
+use App\Services\MejaService;
+use App\Services\TransactionService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TransactionController extends Controller
 {
-
     protected TransactionService $transactionService;
+
     protected MejaService $mejaService;
 
     public function __construct()
     {
-        $this->transactionService = new TransactionService();
-        $this->mejaService = new MejaService();
+        $this->transactionService = new TransactionService;
+        $this->mejaService = new MejaService;
     }
 
     /**
@@ -40,12 +41,15 @@ class TransactionController extends Controller
     public function create()
     {
         $this->authorize('create', TransactionHeader::class);
+
         return view('pages.transactions.createTransaction');
     }
 
-    public function createOrder($id) {
+    public function createOrder($id)
+    {
         $this->authorize('create', TransactionHeader::class);
         $meja = $this->mejaService->getMejaById($id);
+
         return view('pages.pusat.meja.createOrder', compact('meja'));
     }
 
@@ -56,18 +60,34 @@ class TransactionController extends Controller
     {
         $this->authorize('create', TransactionHeader::class);
         $result = $this->transactionService->createTransaction($request->validated());
-        if($result) {
+        if ($result) {
             $resultUpdateMejaStatus = $this->mejaService->updateStatus($request->input('meja_id'), 'diambil');
-            if($request->filled('redirect_to')) {
+            if ($request->filled('redirect_to')) {
                 return redirect($request->input('redirect_to'))->with('success', 'Transaksi berhasil dibuat.');
             }
+
             return redirect()->route('transactions.index')->with('success', 'Transaksi berhasil dibuat.');
-        }
-        else {
-            if($request->filled('redirect_to')) {
+        } else {
+            if ($request->filled('redirect_to')) {
                 return redirect()->back()->with('error', 'Transaksi gagal dibuat.');
             }
+
             return redirect()->back()->with('error', 'Transaksi gagal dibuat.');
+        }
+    }
+
+    public function storeOrder(StoreTransactionDetailRequest $request, string $meja_id, string $transaction_id)
+    {
+        if ($request->input('transaction_header_id') != $transaction_id) {
+            return redirect()->back()->with('error', 'Pesanan gagal ditambahkan.');
+        }
+
+        $this->authorize('create', TransactionHeader::class);
+        $result = $this->transactionService->createTransactionDetail($request->validated());
+        if ($result) {
+            return redirect()->route('mejas.show', $meja_id)->with('success', 'Pesanan berhasil ditambahkan.');
+        } else {
+            return redirect()->back()->with('error', 'Pesanan gagal ditambahkan.');
         }
     }
 
@@ -106,17 +126,17 @@ class TransactionController extends Controller
 
         $result = $this->transactionService->updateTransaction($id, $request->validated());
 
-        if (!$result) {
+        if (! $result) {
             return response()->json([
                 'success' => false,
-                'message' => 'Gagal memperbarui transaksi.'
+                'message' => 'Gagal memperbarui transaksi.',
             ], 422);
         }
 
         session()->flash('success', 'Transaksi berhasil diperbarui.');
 
         return response()->json([
-            'success' => true
+            'success' => true,
         ]);
     }
 
@@ -129,8 +149,10 @@ class TransactionController extends Controller
         if ($result) {
             return redirect()->route('transactions.show', $id)->with('success', 'Meja transaksi berhasil ditutup.');
         }
+
         return redirect()->route('transactions.show', $id)->with('error', 'Gagal menutup meja transaksi.');
     }
+
     /**
      * Remove the specified resource from storage.
      */
@@ -139,10 +161,10 @@ class TransactionController extends Controller
         $transaction = $this->transactionService->getTransactionById($id);
         $this->authorize('delete', $transaction);
         $result = $this->transactionService->deleteTransaction($id);
-        if(!$result){
+        if (! $result) {
             return redirect()->route('transactions.index')->with('error', 'Gagal menghapus transaksi.');
         }
+
         return redirect()->back()->with('success', 'Transaksi berhasil dihapus.');
     }
-
 }

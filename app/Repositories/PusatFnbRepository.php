@@ -6,9 +6,9 @@ use App\Models\FnB_Pusat;
 
 class PusatFnbRepository
 {
-    public function getAllFnbsByPusat($pusat)
+    public function getAllFnbsByPusatId($pusat_id)
     {
-        return FnB_Pusat::where('pusat_id', $pusat->id)->with(['fnb', 'pusat'])->get();
+        return FnB_Pusat::with('fnb')->where('pusat_id', $pusat_id)->get();
     }
 
     public function sync($pusat, $data)
@@ -16,4 +16,3 @@ class PusatFnbRepository
         return $pusat->fnbs()->sync($data);
     }
 }
-

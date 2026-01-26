@@ -22,6 +22,7 @@
                 <form action="{{ route('transactions.store') }}" method="POST" enctype="multipart/form-data"
                     class="grid gap-6">
                     @csrf
+                    {{-- honestly not secured, should have done it at backend --}}
                     <input type="hidden" name="pusat_id" value="{{ $meja->pusat_id }}">
                     <input type="hidden" name="staff_id" value="{{ auth()->user()->id }}">
                     <input type="hidden" name="status" value="pending">
