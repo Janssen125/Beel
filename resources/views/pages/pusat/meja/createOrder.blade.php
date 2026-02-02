@@ -1,6 +1,11 @@
 @extends('layouts.app')
 @section('title', 'Buat Transaksi Baru')
 @section('content')
+    @if ($errors->any())
+        @foreach ($error as $errors)
+            <div>{{ $errors }}</div>
+        @endforeach
+    @endif
 
     @if (auth()->user()->role == 'staff')
         <x-common.page-breadcrumb pageTitle="Buat Transaksi Baru" :breadcrumbs="[['label' => 'Daftar Meja', 'url' => route('mejas.viewAll', $meja->pusat_id)]]" />
@@ -25,6 +30,7 @@
                     {{-- honestly not secured, should have done it at backend --}}
                     <input type="hidden" name="pusat_id" value="{{ $meja->pusat_id }}">
                     <input type="hidden" name="staff_id" value="{{ auth()->user()->id }}">
+                    <input type="hidden" name="meja_id" value="{{ $meja->id }}">
                     <input type="hidden" name="status" value="pending">
                     <input type="hidden" name="redirect_to" value="{{ route('mejas.viewAll', $meja->pusat_id) }}">
 

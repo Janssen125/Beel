@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Transaction\StoreTransactionDetailRequest;
 use App\Http\Requests\Transaction\StoreTransactionRequest;
 use App\Http\Requests\Transaction\UpdateCloseTableRequest;
+use App\Http\Requests\Transaction\UpdateQuantityRequest;
 use App\Http\Requests\Transaction\UpdateStatusRequest;
 use App\Models\TransactionHeader;
 use App\Services\MejaService;
@@ -91,6 +92,38 @@ class TransactionController extends Controller
         }
     }
 
+    public function updateOrder(UpdateQuantityRequest $request, string $meja_id, string $transaction_id)
+    {
+        if ($request->input('transaction_header_id') != $transaction_id) {
+            return redirect()->back()->with('error', 'Pesanan gagal diperbarui.');
+        }
+
+        $this->authorize('update', $this->transactionService->getTransactionById($transaction_id));
+
+        $result = $this->transactionService->updateTransactionDetail($request->input('id'), $request->validated());
+        if ($result) {
+            return redirect()->route('mejas.show', $meja_id)->with('success', 'Pesanan berhasil diperbarui.');
+        } else {
+            return redirect()->back()->with('error', 'Pesanan gagal diperbarui.');
+        }
+    }
+
+    public function deleteOrder(string $meja_id, string $id)
+    {
+        $transactionDetail = $this->transactionService->getTransactionDetailById($id);
+        if (! $transactionDetail->transaction) {
+            return redirect()->back()->with('error', 'Pesanan gagal dihapus.');
+        }
+        $this->authorize('delete', $transactionDetail->transaction);
+
+        $result = $this->transactionService->deleteTransactionDetail($id);
+        if ($result) {
+            return redirect()->route('mejas.show', $meja_id)->with('success', 'Pesanan berhasil dihapus.');
+        } else {
+            return redirect()->back()->with('error', 'Pesanan gagal dihapus.');
+        }
+    }
+
     /**
      * Display the specified resource.
      */
@@ -140,17 +173,20 @@ class TransactionController extends Controller
         ]);
     }
 
-    public function closeTable(UpdateCloseTableRequest $request, string $id)
+    public function closeTable(UpdateCloseTableRequest $request, string $meja_id, string $id)
     {
         $transaction = $this->transactionService->getTransactionById($id);
         $this->authorize('update', $transaction);
 
         $result = $this->transactionService->updateTransaction($id, $request->validated());
+        $newtransaction = $this->transactionService->getTransactionById($id);
         if ($result) {
-            return redirect()->route('transactions.show', $id)->with('success', 'Meja transaksi berhasil ditutup.');
+            $result = $this->mejaService->updateStatus($meja_id, 'kosong');
+
+            return redirect()->route('mejas.viewAll', $transaction->pusat_id)->with('success', 'Meja transaksi berhasil ditutup.');
         }
 
-        return redirect()->route('transactions.show', $id)->with('error', 'Gagal menutup meja transaksi.');
+        return redirect()->route('mejas.viewAll', $transaction->pusat_id)->with('error', 'Gagal menutup meja transaksi.');
     }
 
     /**
@@ -161,10 +197,10 @@ class TransactionController extends Controller
         $transaction = $this->transactionService->getTransactionById($id);
         $this->authorize('delete', $transaction);
         $result = $this->transactionService->deleteTransaction($id);
-        if (! $result) {
-            return redirect()->route('transactions.index')->with('error', 'Gagal menghapus transaksi.');
+        if ($result) {
+            return redirect()->route('transactions.index')->with('success', 'Transaksi berhasil dihapus.');
         }
 
-        return redirect()->back()->with('success', 'Transaksi berhasil dihapus.');
+        return redirect()->route('transactions.index')->with('error', 'Gagal menghapus transaksi.');
     }
 }

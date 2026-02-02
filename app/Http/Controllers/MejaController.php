@@ -94,7 +94,6 @@ class MejaController extends Controller
         $this->authorize('view', $meja);
         $pusat_id = $meja->pusat_id;
         $transaction = $this->transactionService->getTransactionByPusatIdNomorMeja($pusat_id, $meja->nomor_meja);
-
         return view('pages.pusat.meja.viewMejaDetail', compact('transaction', 'meja'));
     }
 

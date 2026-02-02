@@ -4,7 +4,7 @@ namespace App\Http\Requests\Transaction;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateCloseTableRequest extends FormRequest
+class UpdateQuantityRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,12 +22,8 @@ class UpdateCloseTableRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nomor_meja' => 'required|string|max:50',
-            'harga_per_jam' => 'required|numeric|min:0',
-            'total_harga' => 'required|numeric|min:0',
-            'total_waktu_detik' => 'required|integer|min:0',
-            'status' => 'required|in:completed,cancelled',
-            'waktu_tutup' => 'required|date_format:Y-m-d H:i:s',
+            'transaction_header_id' => 'required|exists:transaction_headers,id',
+            'quantity' => 'required|integer|min:1',
         ];
     }
 }

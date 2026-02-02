@@ -23,11 +23,12 @@ class StoreTransactionRequest extends FormRequest
     {
         return [
             'staff_id' => 'required|exists:users,id',
+            'meja_id' => 'nullable|exists:mejas,id',
             'nama_customer' => 'required|string|max:255',
             'pusat_id' => 'required|exists:pusats,id',
             'status' => 'required|string|in:pending,completed,cancelled',
             'nomor_meja' => 'nullable|string|max:50',
-            'total_waktu' => 'nullable|numeric|min:0',
+            'total_waktu_detik' => 'nullable|numeric|min:0',
             'harga_per_jam' => 'nullable|numeric|min:0',
             'total_harga' => 'nullable|numeric|min:0',
             'waktu_tutup' => 'nullable|date_format:Y-m-d H:i:s',

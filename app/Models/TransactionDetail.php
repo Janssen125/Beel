@@ -12,12 +12,11 @@ class TransactionDetail extends Model
         'transaction_header_id',
         'nama_fnb',
         'harga',
-        'quantity'
+        'quantity',
     ];
 
     public function transaction()
     {
-        return $this->belongsTo(Transaction::class, 'transaction_header_id');
+        return $this->belongsTo(TransactionHeader::class, 'transaction_header_id');
     }
-
 }

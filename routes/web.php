@@ -60,6 +60,10 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/pusat/mejas/{meja_id}/addOrder/{transaction_id}', [App\Http\Controllers\MejaController::class, 'addOrder'])->name('mejas.addOrder');
     Route::post('/pusat/mejas/{meja_id}/storeOrder/{transaction_id}', [App\Http\Controllers\TransactionController::class, 'storeOrder'])->name('transactions.storeOrder');
+    Route::put('/pusat/mejas/{meja_id}/updateOrder/{transaction_detail_id}', [App\Http\Controllers\TransactionController::class, 'updateOrder'])->name('transactions.updateOrder');
+    Route::delete('/pusat/mejas/{meja_id}/deleteOrder/{transaction_detail_id}', [App\Http\Controllers\TransactionController::class, 'deleteOrder'])->name('transactions.deleteOrder');
+
+    Route::put('/pusat/mejas/{meja_id}/closeTable/{id}', [App\Http\Controllers\TransactionController::class, 'closeTable'])->name('transactions.closeTable');
 
     Route::resource('pusats', App\Http\Controllers\PusatController::class);
     Route::resource('users', App\Http\Controllers\UserController::class);
