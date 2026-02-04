@@ -10,7 +10,11 @@
     <!-- User Button -->
     <button class="flex items-center text-gray-700 dark:text-gray-400" @click.prevent="toggleDropdown()" type="button">
         <span class="mr-3 overflow-hidden rounded-full h-11 w-11">
-            <img src="{{ Auth::user()->profile_photo ?? '/images/user/user-01.jpg' }}" alt="User" />
+            @if (auth()->user()->profile_photo)
+                <img src="{{ asset(auth()->user()->profile_photo) }}" alt="User" />
+            @else
+                <img src="/images/user/user-01.jpg" alt="User" />
+            @endif
         </span>
 
         <span class="block mr-1 font-medium text-theme-sm">{{ Auth::user()->name }}</span>
@@ -36,8 +40,8 @@
             <span class="mt-0.5 block text-theme-xs text-gray-500 dark:text-gray-400">{{ Auth::user()->email }}</span>
         </div>
 
-        <!-- Menu Items -->
-        <ul class="flex flex-col gap-1 pt-4 pb-3 border-b border-gray-200 dark:border-gray-800">
+        <!-- Menu Items no use -->
+        {{-- <ul class="flex flex-col gap-1 pt-4 pb-3 border-b border-gray-200 dark:border-gray-800">
             @php
                 $menuItems = [
                     [
@@ -90,7 +94,7 @@
                     </a>
                 </li>
             @endforeach
-        </ul>
+        </ul> --}}
 
         <!-- Sign Out -->
         <form method="POST" action="{{ route('logout') }}">

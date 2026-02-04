@@ -2,37 +2,47 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\TransactionHeader;
+use App\Services\FnbService;
+use App\Services\PusatService;
+use App\Services\TransactionService;
+use App\Services\UserService;
 
 class SuperAdminController extends Controller
 {
-    public function __construct() {
+    protected UserService $userService;
+
+    protected PusatService $pusatService;
+
+    protected TransactionService $transactionService;
+
+    protected FnbService $fnbService;
+
+    public function __construct()
+    {
+        $this->userService = new UserService;
+        $this->pusatService = new PusatService;
+        $this->transactionService = new TransactionService;
+        $this->fnbService = new FnbService;
         $this->middleware('can:isSuperAdmin');
     }
 
-    public function index() {
-        return view('pages.superadmin.dashboard');
-    }
+    public function index()
+    {
+        $users = $this->userService->getAllUsers(auth()->user());
+        $pusats = $this->pusatService->getAllPusat();
+        $transactions = $this->transactionService->getAllTransactions(auth()->user());
+        $fnbs = $this->fnbService->getAllFnBs();
 
-    public function users() {
-        return view('pages.superadmin.users');
-    }
+        $totalUser = $users->count();
+        $totalPusat = $pusats->count();
+        $totalTransaction = $transactions->count();
+        $totalFnb = $fnbs->count();
 
-    public function fnb() {
-        return view('pages.superadmin.fnb');
+        return view('pages.superadmin.dashboard', compact(
+            'totalUser',
+            'totalPusat',
+            'totalTransaction',
+            'totalFnb'
+        ));
     }
-
-    public function pusat() {
-        return view('pages.superadmin.pusat');
-    }
-
-    public function kota() {
-        return view('pages.superadmin.kota');
-    }
-
-    public function provinsi() {
-        return view('pages.superadmin.provinsi');
-    }
-
 }

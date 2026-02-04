@@ -2,20 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Services\FnbService;
 use App\Http\Requests\Fnb\StoreFnbRequest;
 use App\Http\Requests\Fnb\UpdateFnbRequest;
+use App\Services\FnbService;
+use App\Services\ImageService;
 
 class FnbController extends Controller
 {
-
     protected FnbService $fnbService;
+
+    protected ImageService $imageService;
 
     public function __construct()
     {
-        $this->fnbService = new FnbService();
+
+        $this->fnbService = new FnbService;
+        $this->imageService = new ImageService;
     }
+
     /**
      * Display a listing of the resource.
      */
@@ -23,6 +27,7 @@ class FnbController extends Controller
     {
         $this->authorize('viewAny', FnB::class);
         $fnbs = $this->fnbService->getAllFnBs();
+
         return view('pages.fnb.viewAllFnbs', compact('fnbs'));
     }
 
@@ -32,6 +37,7 @@ class FnbController extends Controller
     public function create()
     {
         $this->authorize('create', FnB::class);
+
         return view('pages.fnb.createFnb');
     }
 
@@ -42,9 +48,15 @@ class FnbController extends Controller
     {
         $this->authorize('create', FnB::class);
         $result = $this->fnbService->createFnb($request->validated());
-        if($result){
+        if ($result) {
+            if ($request->hasFile('foto_fnb')) {
+                $path = $this->imageService->uploadImage($request->file('foto_fnb'), 'fnbs');
+                $this->fnbService->updateFnb($id, ['foto_fnb' => $path]);
+            }
+
             return redirect()->route('fnbs.index')->with('success', 'FnB berhasil dibuat.');
         }
+
         return redirect()->back()->with('error', 'FnB gagal dibuat.');
     }
 
@@ -63,6 +75,7 @@ class FnbController extends Controller
     {
         $fnb = $this->fnbService->getFnbById($id);
         $this->authorize('update', $fnb);
+
         return view('pages.fnb.editFnb', compact('fnb'));
     }
 
@@ -74,9 +87,15 @@ class FnbController extends Controller
         $fnb = $this->fnbService->getFnbById($id);
         $this->authorize('update', $fnb);
         $result = $this->fnbService->updateFnb($id, $request->validated());
-        if($result){
+        if ($result) {
+            if ($request->hasFile('foto_fnb')) {
+                $path = $this->imageService->uploadImage($request->file('foto_fnb'), 'fnbs');
+                $this->fnbService->updateFnb($id, ['foto_fnb' => $path]);
+            }
+
             return redirect()->route('fnbs.index')->with('success', 'FnB berhasil diupdate.');
         }
+
         return redirect()->back()->with('error', 'FnB gagal diupdate.');
     }
 
@@ -88,9 +107,10 @@ class FnbController extends Controller
         $fnb = $this->fnbService->getFnbById($id);
         $this->authorize('delete', $fnb);
         $result = $this->fnbService->deleteFnb($id);
-        if($result){
+        if ($result) {
             return redirect()->route('fnbs.index')->with('success', 'FnB berhasil dihapus.');
         }
+
         return redirect()->back()->with('error', 'FnB gagal dihapus.');
     }
 }

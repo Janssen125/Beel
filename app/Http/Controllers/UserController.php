@@ -2,27 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
-use App\Services\UserService;
-use App\Services\KotaService;
-use App\Services\ProvinsiService;
 use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
+use App\Models\User;
+use App\Services\ImageService;
+use App\Services\KotaService;
+use App\Services\ProvinsiService;
+use App\Services\UserService;
 
 class UserController extends Controller
 {
-
     protected UserService $userService;
+
     protected KotaService $kotaService;
+
     protected ProvinsiService $provinsiService;
+
+    protected ImageService $imageService;
 
     public function __construct()
     {
-        $this->userService = new UserService();
-        $this->kotaService = new KotaService();
-        $this->provinsiService = new ProvinsiService();
+        $this->userService = new UserService;
+        $this->kotaService = new KotaService;
+        $this->provinsiService = new ProvinsiService;
+        $this->imageService = new ImageService;
     }
 
     /**
@@ -32,7 +35,7 @@ class UserController extends Controller
     {
         $this->authorize('viewAny', User::class);
 
-        $users = $this->userService->getAllUsers(Auth::user()->id);
+        $users = $this->userService->getAllUsers(auth()->user());
 
         return view('pages.users.viewAllUsers', compact('users'));
     }
@@ -45,6 +48,7 @@ class UserController extends Controller
         $this->authorize('create', User::class);
         $kotas = $this->kotaService->getAllKotas();
         $provinsis = $this->provinsiService->getAllProvinsis();
+
         return view('pages.users.createUser', compact(['kotas', 'provinsis']));
     }
 
@@ -55,10 +59,14 @@ class UserController extends Controller
     {
         $this->authorize('create', User::class);
         $result = $this->userService->createUser($request->validated());
-        if($result){
+        if ($result) {
+            if ($request->hasFile('profile_photo')) {
+                $path = $this->imageService->uploadImage($request->file('profile_photo'), 'users');
+                $this->userService->updateUser($result->id, ['profile_photo' => $path]);
+            }
+
             return redirect()->route('users.index')->with('success', 'User berhasil dibuat.');
-        }
-        else {
+        } else {
             return redirect()->back()->with('error', 'User gagal dibuat.');
         }
     }
@@ -85,6 +93,7 @@ class UserController extends Controller
         $this->authorize('update', $user);
         $kotas = $this->kotaService->getAllKotas();
         $provinsis = $this->provinsiService->getAllProvinsis();
+
         return view('pages.users.editUser', compact(['user', 'kotas', 'provinsis']));
     }
 
@@ -96,10 +105,14 @@ class UserController extends Controller
         $model = $this->userService->getUserById($id);
         $this->authorize('update', $model);
         $result = $this->userService->updateUser($id, $request->validated());
-        if($result){
+        if ($result) {
+            if ($request->hasFile('profile_photo')) {
+                $path = $this->imageService->uploadImage($request->file('profile_photo'), 'users');
+                $this->userService->updateUser($id, ['profile_photo' => $path]);
+            }
+
             return redirect()->route('users.index')->with('success', 'User berhasil diubah.');
-        }
-        else {
+        } else {
             return redirect()->back()->with('error', 'User gagal diubah.');
         }
     }
@@ -112,10 +125,9 @@ class UserController extends Controller
         $user = $this->userService->getUserById($id);
         $this->authorize('delete', $user);
         $result = $this->userService->deleteUser($id);
-        if($result){
+        if ($result) {
             return redirect()->route('users.index')->with('success', 'User berhasil dihapus.');
-        }
-        else {
+        } else {
             return redirect()->bcak()->with('error', 'User gaga dihapus.');
         }
     }

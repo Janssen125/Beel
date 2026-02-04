@@ -151,7 +151,7 @@
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path
                                         d=" M4.79175 7.396L10.0001
-                                                                                                                                                                                                                            12.6043L15.2084 7.396"
+                                                                                                                                                                                                                                        12.6043L15.2084 7.396"
                                         stroke="" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                                 </svg>
                             </span>
@@ -206,7 +206,7 @@
                                     fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path
                                         d=" M4.79175 7.396L10.0001
-                                                                                                                                                                                                                                        12.6043L15.2084 7.396"
+                                                                                                                                                                                                                                                    12.6043L15.2084 7.396"
                                         stroke="" stroke-width="1.5" stroke-linecap="round"
                                         stroke-linejoin="round" />
                                 </svg>
@@ -277,7 +277,7 @@
                         <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                             Foto Profile
                         </label>
-                        <input type="file" name="profile_photo"
+                        <input type="file" accept=".jpg, .jpeg, .png" name="profile_photo"
                             @error('profile_photo')
                             class="focus:border-ring-error-300 shadow-theme-xs focus:file:ring-error-300 h-11 w-full overflow-hidden rounded-lg border border-error-300 bg-transparent text-sm text-gray-500 transition-colors file:mr-5 file:border-collapse file:cursor-pointer file:rounded-l-lg file:border-0 file:border-r file:border-solid file:border-gray-200 file:bg-gray-50 file:py-3 file:pr-3 file:pl-3.5 file:text-sm file:text-gray-700 placeholder:text-gray-400 hover:file:bg-gray-100 focus:outline-hidden dark:border-error-700 dark:bg-gray-900 dark:text-gray-400 dark:text-white/90 dark:file:border-gray-800 dark:file:bg-white/[0.03] dark:file:text-gray-400 dark:placeholder:text-gray-400"
                         @else
@@ -335,7 +335,7 @@
                                     fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path
                                         d=" M4.79175
-                                                                                                                                                                                                                                                                                                                        7.396L10.0001 12.6043L15.2084 7.396"
+                                                                                                                                                                                                                                                                                                                                    7.396L10.0001 12.6043L15.2084 7.396"
                                         stroke="" stroke-width="1.5" stroke-linecap="round"
                                         stroke-linejoin="round" />
                                 </svg>

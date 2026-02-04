@@ -113,7 +113,35 @@
                         <ul class="flex flex-col gap-1">
                             @foreach ($menuGroup['items'] as $itemIndex => $item)
                                 <li>
-                                    @if (isset($item['subItems']))
+                                    @if ($item['path'] == '/logout')
+                                        <form method="POST" action="{{ route('logout') }}">
+                                            @csrf
+                                            <button type="submit" class="menu-item group w-full"
+                                                :class="[
+                                                    isActive('{{ $item['path'] }}') ? 'menu-item-active' :
+                                                    'menu-item-inactive',
+                                                    (!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store
+                                                        .sidebar.isMobileOpen) ?
+                                                    'xl:justify-center' :
+                                                    'justify-start'
+                                                ]">
+
+                                                <!-- Icon -->
+                                                <span
+                                                    :class="isActive('{{ $item['path'] }}') ? 'menu-item-icon-active' :
+                                                        'menu-item-icon-inactive'">
+                                                    {!! MenuHelper::getIconSvg($item['icon']) !!}
+                                                </span>
+
+                                                <!-- Text -->
+                                                <span
+                                                    x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
+                                                    class="menu-item-text">
+                                                    {{ $item['name'] }}
+                                                </span>
+                                            </button>
+                                        </form>
+                                    @elseif (isset($item['subItems']))
                                         <!-- Menu Item with Submenu -->
                                         <button @click="toggleSubmenu({{ $groupIndex }}, {{ $itemIndex }})"
                                             class="menu-item group w-full"

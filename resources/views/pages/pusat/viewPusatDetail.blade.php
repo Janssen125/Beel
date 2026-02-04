@@ -144,7 +144,7 @@
                                         </td>
                                         <td class="px-5 py-4 sm:px-6">
                                             <template x-if="fnb.foto_fnb">
-                                                <img :src="`/storage/${fnb.foto_fnb}`" alt="Foto Fnb"
+                                                <img :src="`${fnb.foto_fnb}`" alt="Foto Fnb"
                                                     class="h-16 w-16 rounded-lg object-cover" />
                                             </template>
                                             <template x-if="!fnb.foto_fnb">
