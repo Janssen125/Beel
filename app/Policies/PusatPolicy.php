@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\Pusat;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class PusatPolicy
 {
@@ -21,12 +20,14 @@ class PusatPolicy
      */
     public function view(User $user, Pusat $pusat): bool
     {
-        if($user->role === 'superadmin'){
+        if ($user->role === 'superadmin') {
             return true;
-        } else if($user->role == 'admin'){
+        } elseif ($user->role == 'admin') {
             $user_pusat_id = $user->userPusats->pusat_id;
+
             return $user_pusat_id === $pusat->id;
         }
+
         return false;
     }
 
@@ -43,12 +44,7 @@ class PusatPolicy
      */
     public function update(User $user, Pusat $pusat): bool
     {
-        if($user->role === 'superadmin'){
-            return true;
-        } else if($user->role == 'admin'){
-            $user_pusat_id = $user->userPusats->pusat_id;
-            return $user_pusat_id === $pusat->id;
-        }
+        return $user->role === 'superadmin';
     }
 
     /**

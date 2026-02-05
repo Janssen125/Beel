@@ -13,7 +13,7 @@
                             Pengguna</p>
                         <div class="mb-5">
                             @if ($user->profile_photo)
-                                <img src="{{ asset('storage/' . $user->profile_photo) }}" alt="Profile Photo"
+                                <img src="{{ asset($user->profile_photo) }}" alt="Profile Photo"
                                     class="h-24 w-24 rounded-full object-cover">
                             @else
                                 <div

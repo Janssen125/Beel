@@ -5,6 +5,7 @@
     <div x-data="{
         users: [
             @foreach ($users as $u)
+            @if ($u->email == auth()->user()->email) @continue @endif
         {
             'id': {{ $u->id }},
             'name': '{{ $u->name ?? '-' }}',

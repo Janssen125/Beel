@@ -41,6 +41,18 @@ class MejaController extends Controller
 
     public function viewAll($pusat_id)
     {
+        if (auth()->user()->role == 'admin' || auth()->user()->role == 'staff') {
+            $pusat = $this->pusatService->getPusatById(auth()->user()->userPusats->first()->pusat_id);
+
+            if ($pusat->id != $pusat_id) {
+                return redirect()->back()->with('error', 'Anda tidak memiliki akses ke meja ini.');
+            }
+
+            $mejas = $this->mejaService->getMejasByPusat(auth()->user()->userPusats->first()->pusat_id);
+
+            return view('pages.pusat.meja.viewMejas', compact(['mejas', 'pusat']));
+
+        }
         $this->authorize('viewAny', Meja::class);
         $pusat = $this->pusatService->getPusatById($pusat_id);
         $mejas = $this->mejaService->getMejasByPusat($pusat_id);
@@ -73,7 +85,7 @@ class MejaController extends Controller
         $this->authorize('create', Meja::class);
         if (auth()->user()->role !== 'superadmin') {
             $pusatId = auth()->user()->userPusats()->first()->pusat_id;
-            if ($request->input('pusat_id') != $pusat_id) {
+            if ($request->input('pusat_id') != $pusatId) {
                 return redirect()->back()->with('error', 'Meja gagal dibuat.');
             }
         }
@@ -94,6 +106,7 @@ class MejaController extends Controller
         $this->authorize('view', $meja);
         $pusat_id = $meja->pusat_id;
         $transaction = $this->transactionService->getTransactionByPusatIdNomorMeja($pusat_id, $meja->nomor_meja);
+
         return view('pages.pusat.meja.viewMejaDetail', compact('transaction', 'meja'));
     }
 

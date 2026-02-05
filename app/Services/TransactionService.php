@@ -28,6 +28,11 @@ class TransactionService
         }
     }
 
+    public function getAllTransactionByPusatId($pusat_id)
+    {
+        return $this->transactionHeaderRepository->getAllTransactionByPusatId($pusat_id);
+    }
+
     public function getTransactionByPusatIdNomorMeja($pusat_id, $nomor_meja)
     {
         return $this->transactionHeaderRepository->getTransactionByPusatIdNomorMeja($pusat_id, $nomor_meja);

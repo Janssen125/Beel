@@ -11,6 +11,11 @@ class PusatRepository
         return Pusat::with(['pemilik', 'kota'])->get();
     }
 
+    public function getAllPusatByIds($id)
+    {
+        return Pusat::with(['pemilik', 'kota'])->where('id', $id)->get();
+    }
+
     public function getPusatById($id)
     {
         return Pusat::with(['pemilik', 'kota'])->findOrFail($id);

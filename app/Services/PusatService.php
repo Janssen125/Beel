@@ -26,6 +26,12 @@ class PusatService
         return $this->pusatRepository->getAllPusat();
     }
 
+    // it doesn't make sense, but yes
+    public function getAllPusatById($id)
+    {
+        return $this->pusatRepository->getAllPusatByIds($id);
+    }
+
     public function getPusatById($id)
     {
         return $this->pusatRepository->getPusatById($id);

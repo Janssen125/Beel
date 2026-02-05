@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\TransactionHeader;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class TransactionPolicy
 {
@@ -21,15 +20,13 @@ class TransactionPolicy
      */
     public function view(User $user, TransactionHeader $transactionHeader): bool
     {
-        if($user->role == 'superadmin') {
+        if ($user->role == 'superadmin') {
             return true;
-        }
-        else if($user->role == 'admin' || $user->role == 'staff')
-        {
+        } elseif ($user->role == 'admin' || $user->role == 'staff') {
             $pusat_id = $user->userPusats()->first()->pusat_id;
+
             return $transactionHeader->pusat_id == $pusat_id;
-        }
-        else{
+        } else {
             return false;
         }
     }
@@ -47,15 +44,13 @@ class TransactionPolicy
      */
     public function update(User $user, TransactionHeader $transactionHeader): bool
     {
-        if($user->role == 'superadmin') {
+        if ($user->role == 'superadmin') {
             return true;
-        }
-        else if($user->role == 'admin' || $user->role == 'staff')
-        {
+        } elseif ($user->role == 'admin' || $user->role == 'staff') {
             $pusat_id = $user->userPusats()->first()->pusat_id;
+
             return $transactionHeader->pusat_id == $pusat_id;
-        }
-        else{
+        } else {
             return false;
         }
     }
@@ -65,15 +60,13 @@ class TransactionPolicy
      */
     public function delete(User $user, TransactionHeader $transactionHeader): bool
     {
-        if($user->role == 'superadmin') {
+        if ($user->role == 'superadmin') {
             return true;
-        }
-        else if($user->role == 'admin')
-        {
+        } elseif ($user->role == 'admin' || $user->role == 'staff') {
             $pusat_id = $user->userPusats()->first()->pusat_id;
+
             return $transactionHeader->pusat_id == $pusat_id;
-        }
-        else{
+        } else {
             return false;
         }
     }

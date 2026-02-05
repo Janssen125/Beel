@@ -2,26 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Http\Requests\Pusat\StorePusatRequest;
 use App\Http\Requests\Pusat\UpdatePusatRequest;
 use App\Http\Requests\PusatFnb\UpdatePusatFnbRequest;
-use App\Services\PusatService;
 use App\Services\FnBService;
 use App\Services\KotaService;
+use App\Services\PusatService;
 
 class PusatController extends Controller
 {
-
     protected PusatService $pusatService;
+
     protected FnBService $fnbService;
+
     protected KotaService $kotaService;
 
     public function __construct()
     {
-        $this->pusatService = new PusatService();
-        $this->fnbService = new FnBService();
-        $this->kotaService = new KotaService();
+        $this->pusatService = new PusatService;
+        $this->fnbService = new FnBService;
+        $this->kotaService = new KotaService;
     }
 
     /**
@@ -29,8 +29,17 @@ class PusatController extends Controller
      */
     public function index()
     {
+        // this is wrong actually
+        if (auth()->user()->role == 'admin' || auth()->user()->role == 'staff') {
+            $pusats = $this->pusatService->getAllPusatById(auth()->user()->userPusats->first()->pusat_id);
+            // this should be illegal
+            $this->authorize('view', $pusats->first());
+
+            return view('pages.pusat.viewAllPusats', compact('pusats'));
+        }
         $this->authorize('viewAny', Pusat::class);
         $pusats = $this->pusatService->getAllPusat();
+
         return view('pages.pusat.viewAllPusats', compact('pusats'));
     }
 
@@ -42,6 +51,7 @@ class PusatController extends Controller
         $this->authorize('create', Pusat::class);
         $pemiliks = $this->pusatService->getAllPemiliks();
         $kotas = $this->kotaService->getAllKotas();
+
         return view('pages.pusat.createPusat', compact(['pemiliks', 'kotas']));
     }
 
@@ -52,9 +62,10 @@ class PusatController extends Controller
     {
         $this->authorize('create', Pusat::class);
         $result = $this->pusatService->createPusat($request->validated());
-        if($result){
+        if ($result) {
             return redirect()->route('pusats.index')->with('success', 'Pusat berhasil dibuat.');
         }
+
         return redirect()->back()->with('error', 'Pusat gagal dibuat.');
     }
 
@@ -65,6 +76,7 @@ class PusatController extends Controller
     {
         $pusat = $this->pusatService->getPusatById($id);
         $this->authorize('view', $pusat);
+
         return view('pages.pusat.viewPusatDetail', compact('pusat'));
     }
 
@@ -77,6 +89,7 @@ class PusatController extends Controller
         $this->authorize('update', $pusat);
         $pemiliks = $this->pusatService->getAllPemiliks();
         $kotas = $this->kotaService->getAllKotas();
+
         return view('pages.pusat.editPusat', compact('pusat', 'pemiliks', 'kotas'));
     }
 
@@ -88,9 +101,10 @@ class PusatController extends Controller
         $pusat = $this->pusatService->getPusatById($id);
         $this->authorize('update', $pusat);
         $result = $this->pusatService->updatePusat($id, $request->validated());
-        if($result){
+        if ($result) {
             return redirect()->route('pusats.index')->with('success', 'Pusat berhasil diupdate.');
         }
+
         return redirect()->back()->with('error', 'Pusat gagal diupdate.');
     }
 
@@ -102,17 +116,20 @@ class PusatController extends Controller
         $pusat = $this->pusatService->getPusatById($id);
         $this->authorize('delete', $pusat);
         $result = $this->pusatService->deletePusat($id);
-        if($result){
+        if ($result) {
             return redirect()->route('pusats.index')->with('success', 'Pusat berhasil dihapus.');
         }
+
         return redirect()->back()->with('error', 'Pusat gagal dihapus.');
     }
 
-    public function addFnb(string $id) {
+    public function addFnb(string $id)
+    {
         $pusat = $this->pusatService->getPusatById($id);
         $this->authorize('update', $pusat);
         $fnbs = $this->fnbService->getAllFnbs();
         $selectedFnbs = $this->pusatService->getSelectedFnbs($pusat);
+
         return view('pages.pusat.fnb.updateFnb', compact(['pusat', 'fnbs', 'selectedFnbs']));
     }
 
@@ -121,10 +138,10 @@ class PusatController extends Controller
         $pusat = $this->pusatService->getPusatById($id);
         $this->authorize('update', $pusat);
         $result = $this->pusatService->syncFnbs($pusat, $request->validated());
-        if($result){
+        if ($result) {
             return redirect()->route('pusats.show', $pusat->id)->with('success', 'FnB berhasil di ubah.');
         }
+
         return redirect()->back()->with('error', 'FnB gagal diubah.');
     }
-
 }

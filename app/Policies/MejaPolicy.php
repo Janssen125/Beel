@@ -2,9 +2,8 @@
 
 namespace App\Policies;
 
-use App\Models\User;
 use App\Models\Meja;
-use Illuminate\Auth\Access\Response;
+use App\Models\User;
 
 class MejaPolicy
 {
@@ -13,7 +12,7 @@ class MejaPolicy
      */
     public function viewAny(User $user): bool
     {
-        if($user->role == 'superadmin') {
+        if ($user->role == 'superadmin') {
             return true;
         }
     }
@@ -23,10 +22,11 @@ class MejaPolicy
      */
     public function view(User $user, Meja $meja): bool
     {
-        if($user->role == 'superadmin') {
+        if ($user->role == 'superadmin') {
             return true;
-        } else if($user->role == 'admin' || $user->role == 'staff') {
+        } elseif ($user->role == 'admin' || $user->role == 'staff') {
             $pusat_id = $user->userPusats()->first()->pusat_id;
+
             return $meja->pusat_id == $pusat_id;
         }
     }
@@ -36,9 +36,7 @@ class MejaPolicy
      */
     public function create(User $user): bool
     {
-        if($user->role == 'superadmin' || $user->role == 'admin') {
-            return true;
-        }
+        return $user->role == 'superadmin' || $user->role == 'admin';
     }
 
     /**
@@ -46,12 +44,15 @@ class MejaPolicy
      */
     public function update(User $user, Meja $meja): bool
     {
-        if($user->role == 'superadmin') {
+        if ($user->role == 'superadmin') {
             return true;
-        } else if($user->role == 'admin') {
+        } elseif ($user->role == 'admin') {
             $pusat_id = $user->userPusats()->first()->pusat_id;
+
             return $meja->pusat_id == $pusat_id;
         }
+
+        return false;
     }
 
     /**
@@ -59,12 +60,15 @@ class MejaPolicy
      */
     public function delete(User $user, Meja $meja): bool
     {
-        if($user->role == 'superadmin') {
+        if ($user->role == 'superadmin') {
             return true;
-        } else if($user->role == 'admin') {
+        } elseif ($user->role == 'admin') {
             $pusat_id = $user->userPusats()->first()->pusat_id;
+
             return $meja->pusat_id == $pusat_id;
         }
+
+        return false;
     }
 
     /**

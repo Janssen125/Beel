@@ -41,7 +41,7 @@ class MenuHelper
                 'icon' => 'table',
                 'name' => 'Daftar Jenis Meja',
                 'path' => '/jenis_mejas/',
-            ]
+            ],
         ];
     }
 
@@ -52,6 +52,11 @@ class MenuHelper
                 'icon' => 'dashboard',
                 'name' => 'Dashboard',
                 'path' => '/admin/dashboard',
+            ],
+            [
+                'icon' => 'pusat',
+                'name' => 'Pusat',
+                'path' => '/pusats/',
             ],
             [
                 'icon' => 'transaction',
@@ -74,14 +79,19 @@ class MenuHelper
                 'name' => 'Dashboard',
                 'path' => '/staff/dashboard',
             ],
-            // Buat cth :3
             [
-                'name' => 'Forms',
-                'icon' => 'forms',
-                'subItems' => [
-                    ['name' => 'Form Elements', 'path' => '/form-elements', 'pro' => false],
-                ],
+                'icon' => 'table',
+                'name' => 'Meja',
+                'path' => '/pusat/'.auth()->user()->userPusats->first()->pusat_id.'/mejas',
             ],
+            // Buat cth :3
+            // [
+            //     'name' => 'Forms',
+            //     'icon' => 'forms',
+            //     'subItems' => [
+            //         ['name' => 'Form Elements', 'path' => '/form-elements', 'pro' => false],
+            //     ],
+            // ],
         ];
     }
 
@@ -92,22 +102,21 @@ class MenuHelper
                 'icon' => 'logout',
                 'name' => 'Logout',
                 'path' => '/logout',
-            ]
+            ],
         ];
     }
-
 
     public static function getMenuGroupsSuperAdmin()
     {
         return [
             [
                 'title' => 'Menu',
-                'items' => self::getMainNavItemsSuperAdmin()
+                'items' => self::getMainNavItemsSuperAdmin(),
             ],
             [
                 'title' => 'Lainnya',
-                'items' => self::getOthersItems()
-            ]
+                'items' => self::getOthersItems(),
+            ],
         ];
     }
 
@@ -116,12 +125,12 @@ class MenuHelper
         return [
             [
                 'title' => 'Menu',
-                'items' => self::getMainNavItemsAdmin()
+                'items' => self::getMainNavItemsAdmin(),
             ],
             [
                 'title' => 'Lainnya',
-                'items' => self::getOthersItems()
-            ]
+                'items' => self::getOthersItems(),
+            ],
         ];
     }
 
@@ -130,12 +139,12 @@ class MenuHelper
         return [
             [
                 'title' => 'Menu',
-                'items' => self::getMainNavItemsStaff()
+                'items' => self::getMainNavItemsStaff(),
             ],
             [
                 'title' => 'Lainnya',
-                'items' => self::getOthersItems()
-            ]
+                'items' => self::getOthersItems(),
+            ],
         ];
     }
 
