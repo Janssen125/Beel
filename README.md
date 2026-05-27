@@ -41,6 +41,7 @@ Make sure you have the following installed:
 2.  **Install PHP Dependencies**
     ```
     composer install
+    // composer install --no-dev, for prod
     ```
 3.  **Install Frontend Dependencies**
     ```
@@ -89,6 +90,14 @@ resources/css/app.css
 <div class="p-6 bg-white rounded-lg shadow">
     <h1 class="text-xl font-bold text-gray-800">Hello Tailwind</h1>
 </div>
+```
+
+## Laravel Brain (Dev only)
+
+```
+ php artisan serve
+ php artisan brain:scan
+ http://127.0.0.1/_laravel-brain
 ```
 
 ## 🧪 Learning Goals / Notes
