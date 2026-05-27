@@ -48,11 +48,9 @@ Make sure you have the following installed:
     npm install
     ```
 4.  **Configure Database**
-    ```
     copy <code>.env.example</code> file and name it <code>.env</code><br>
     at <code>DB_DATABASE</code>, name it as same as your database<br>
     then run <code>php artisan migrate --seed</code>
-    ```
 
 ## ▶️ Running The Project
 
